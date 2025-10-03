@@ -1,0 +1,8 @@
+examples:
+  - title: "con/duct Demo Example"
+    source_repo: "https://github.com/con/duct/"
+    info_file: "https://raw.githubusercontent.com/con/duct/a539c3e20cccd4455a75cd7bfbae9cd644cdcbff/demo/example_output_info.json"
+    tags:
+      - synthetic
+      - medium-length
+    description: "Demo example from the con/duct repository showing resource usage tracking"

@@ -42,13 +42,13 @@
 
 ## Phase 3.1: Setup
 
-- [ ] **T001** Create pyproject.toml with project metadata and dependencies
+- [x] **T001** Create pyproject.toml with project metadata and dependencies
   - **File**: `pyproject.toml`
   - **Dependencies**: `pydantic>=2.0`, `pyyaml>=6.0`, `requests>=2.31`, `pytest>=7.4`, `pytest-cov>=4.1`
   - **Entry point**: `con-duct-gallery = "con_duct_gallery.__main__:main"`
   - **Build system**: setuptools with `src/` layout
 
-- [ ] **T002** Create project directory structure
+- [x] **T002** Create project directory structure
   - **Directories**:
     - `src/con_duct_gallery/` (package)
     - `tests/unit/` (unit tests)
@@ -58,7 +58,7 @@
     - `src/con_duct_gallery/__init__.py`
     - `.gitignore` (logs/, __pycache__, *.pyc, .pytest_cache, dist/, *.egg-info/)
 
-- [ ] **T003** [P] Configure pytest with pytest.ini
+- [x] **T003** [P] Configure pytest with pytest.ini
   - **File**: `pytest.ini`
   - **Settings**: testpaths, python_files, addopts for coverage
   - **Coverage targets**: src/con_duct_gallery/
@@ -71,7 +71,7 @@
 
 ### Contract Tests (All [P] - Different Files)
 
-- [ ] **T004** [P] Contract test for CLI argument parsing in tests/unit/test_cli.py
+- [x] **T004** [P] Contract test for CLI argument parsing in tests/unit/test_cli.py
   - **From**: contracts/cli-interface.md
   - **Tests**:
     - `test_cli_defaults()`: Assert default config path is `con-duct-gallery.yaml`
@@ -81,7 +81,7 @@
     - `test_cli_dry_run()`: Assert --dry-run sets dry_run=True
   - **Must fail**: No CLI module exists yet
 
-- [ ] **T005** [P] Contract test for YAML schema validation in tests/unit/test_models.py
+- [x] **T005** [P] Contract test for YAML schema validation in tests/unit/test_models.py
   - **From**: contracts/yaml-schema.md
   - **Tests**:
     - `test_valid_yaml_loads()`: Valid YAML with all fields
@@ -94,7 +94,7 @@
     - `test_at_least_one_example_required()`: ValidationError for empty examples list
   - **Must fail**: No models module exists yet
 
-- [ ] **T006** [P] Contract test for markdown output generation in tests/unit/test_generator.py
+- [x] **T006** [P] Contract test for markdown output generation in tests/unit/test_generator.py
   - **From**: contracts/markdown-output.md
   - **Tests**:
     - `test_slugify()`: "con/duct Demo" → "con-duct-demo"
@@ -108,7 +108,7 @@
 
 ### Integration Tests (All [P] - Different Files)
 
-- [ ] **T007** [P] Integration test for end-to-end gallery generation in tests/integration/test_end_to_end.py
+- [x] **T007** [P] Integration test for end-to-end gallery generation in tests/integration/test_end_to_end.py
   - **From**: quickstart.md acceptance scenarios
   - **Tests**:
     - `test_generate_from_scratch(tmp_path)`: Empty dirs → full generation
@@ -125,7 +125,7 @@
       - Then: All logs re-fetched, all plots regenerated
   - **Must fail**: No CLI or core modules exist yet
 
-- [ ] **T008** [P] Integration test for error handling in tests/integration/test_error_handling.py
+- [x] **T008** [P] Integration test for error handling in tests/integration/test_error_handling.py
   - **From**: quickstart.md edge cases
   - **Tests**:
     - `test_invalid_yaml_rejected()`: ValidationError with clear message
@@ -140,7 +140,7 @@
 
 ### Data Models (All [P] - Different Classes in Same File)
 
-- [ ] **T009** [P] Implement ExampleEntry Pydantic model in src/con_duct_gallery/models.py
+- [x] **T009** [P] Implement ExampleEntry Pydantic model in src/con_duct_gallery/models.py
   - **From**: data-model.md § ExampleEntry
   - **Fields**: title, source_repo (HttpUrl), info_file (HttpUrl), tags, plot_options, description
   - **Validators**:
@@ -150,7 +150,7 @@
   - **Properties**: `slug` (GitHub anchor slug from title)
   - **Makes tests pass**: T005 (YAML schema validation tests)
 
-- [ ] **T010** Implement ExampleRegistry Pydantic model in src/con_duct_gallery/models.py
+- [x] **T010** Implement ExampleRegistry Pydantic model in src/con_duct_gallery/models.py
   - **From**: data-model.md § ExampleRegistry
   - **Fields**: examples (list[ExampleEntry])
   - **Validators**: no duplicate titles, at least one example
@@ -160,7 +160,7 @@
 
 ### Core Modules (Sequential - Dependencies)
 
-- [ ] **T011** Implement fetcher module in src/con_duct_gallery/fetcher.py
+- [x] **T011** Implement fetcher module in src/con_duct_gallery/fetcher.py
   - **From**: research.md § HTTP Client, data-model.md § FetchedLog
   - **Functions**:
     - `fetch_info_json(url: str, dest: Path) -> dict`: Download and parse info JSON
@@ -170,7 +170,7 @@
   - **Error handling**: HTTP errors → log warning, raise exception
   - **Caching**: Skip fetch if files exist and not force mode
 
-- [ ] **T012** Implement plotter module in src/con_duct_gallery/plotter.py
+- [x] **T012** Implement plotter module in src/con_duct_gallery/plotter.py
   - **From**: research.md § con-duct Integration, data-model.md § GeneratedPlot
   - **Functions**:
     - `generate_plot(usage_json: Path, output_svg: Path, plot_options: list[str]) -> Path`: Call con-duct plot
@@ -179,7 +179,7 @@
   - **Options**: `--output {svg_path} {plot_options} {usage_json}`
   - **Error handling**: Command not found → clear error, plot failure → log error
 
-- [ ] **T013** Implement generator module in src/con_duct_gallery/generator.py
+- [x] **T013** Implement generator module in src/con_duct_gallery/generator.py
   - **From**: contracts/markdown-output.md, data-model.md § GalleryMarkdown
   - **Functions**:
     - `slugify(title: str) -> str`: Convert title to GitHub anchor slug
@@ -193,14 +193,14 @@
 
 ### CLI Integration
 
-- [ ] **T014** Implement CLI argument parsing in src/con_duct_gallery/cli.py
+- [x] **T014** Implement CLI argument parsing in src/con_duct_gallery/cli.py
   - **From**: contracts/cli-interface.md
   - **Arguments**: generate subcommand with --force, --config, --output, --log-dir, --image-dir, --verbose, --dry-run
   - **Defaults**: config=con-duct-gallery.yaml, output=README.md, log-dir=logs/, image-dir=images/
   - **Returns**: Namespace with parsed arguments
   - **Makes tests pass**: T004 (CLI parsing tests)
 
-- [ ] **T015** Implement main entry point in src/con_duct_gallery/__main__.py
+- [x] **T015** Implement main entry point in src/con_duct_gallery/__main__.py
   - **From**: contracts/cli-interface.md § Behavior
   - **Flow**:
     1. Parse CLI arguments
@@ -219,7 +219,7 @@
 
 ### GitHub Actions (Both [P] - Different Files)
 
-- [ ] **T016** [P] Create daily update workflow in .github/workflows/daily-update.yml
+- [x] **T016** [P] Create daily update workflow in .github/workflows/daily-update.yml
   - **From**: research.md § GitHub Actions Strategy
   - **Trigger**: `schedule: cron '0 0 * * *'` (daily at midnight UTC), `workflow_dispatch` (manual)
   - **Steps**:
@@ -231,7 +231,7 @@
     6. Push to main branch
   - **Permissions**: contents: write
 
-- [ ] **T017** [P] Create PR preview workflow in .github/workflows/pr-preview.yml
+- [x] **T017** [P] Create PR preview workflow in .github/workflows/pr-preview.yml
   - **From**: research.md § GitHub Actions Strategy
   - **Trigger**: `pull_request` on paths `con-duct-gallery.yaml`, `src/**`
   - **Steps**:
@@ -246,7 +246,7 @@
 
 ## Phase 3.5: Polish & Documentation
 
-- [ ] **T018** [P] Create initial con-duct-gallery.yaml with demo example
+- [x] **T018** [P] Create initial con-duct-gallery.yaml with demo example
   - **From**: quickstart.md § Step 1
   - **Content**: Single example using con/duct demo from spec.md
     ```yaml
@@ -260,7 +260,7 @@
         description: "Demo example from the con/duct repository"
     ```
 
-- [ ] **T019** [P] Add unit tests for fetcher module in tests/unit/test_fetcher.py
+- [x] **T019** [P] Add unit tests for fetcher module in tests/unit/test_fetcher.py
   - **Tests**:
     - `test_fetch_info_json()`: Download and parse JSON
     - `test_parse_output_paths()`: Extract file URLs from info JSON
@@ -268,14 +268,14 @@
     - `test_fetch_force_mode()`: Re-fetch even if cached
     - `test_network_error_handling()`: HTTP errors raise exceptions
 
-- [ ] **T020** [P] Add unit tests for plotter module in tests/unit/test_plotter.py
+- [x] **T020** [P] Add unit tests for plotter module in tests/unit/test_plotter.py
   - **Tests**:
     - `test_generate_plot()`: Call con-duct plot command
     - `test_should_regenerate_plot()`: Check timestamp logic
     - `test_plot_with_custom_options()`: Pass plot_options to command
     - `test_con_duct_not_found()`: Handle command not found error
 
-- [ ] **T021** [P] Create README.md with project description and usage
+- [x] **T021** [P] Create README.md with project description and usage
   - **File**: Repository root README.md (development docs, NOT generated gallery)
   - **Sections**:
     - Project description
@@ -285,7 +285,7 @@
     - Development: Running tests with pytest
   - **Note**: This is the development README; gallery README is generated
 
-- [ ] **T022** Run full test suite and verify coverage
+- [x] **T022** Run full test suite and verify coverage
   - **Command**: `pytest --cov=src/con_duct_gallery --cov-report=term-missing`
   - **Coverage target**: >80% for all modules
   - **Verify**: All tests pass, no warnings

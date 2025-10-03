@@ -4,7 +4,16 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(.specify/scripts/bash/setup-plan.sh:*)",
       "Bash(.specify/scripts/bash/update-agent-context.sh:*)",
-      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)"
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(source:*)",
+      "Bash(pytest:*)",
+      "Bash(python3 -m pytest --version)",
+      "Bash(python3 -m pytest -v)",
+      "Bash(pip install:*)",
+      "Bash(python3:*)",
+      "Bash(uv venv:*)",
+      "Bash(uv pip install:*)",
+      "Bash(uv run pytest:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,74 @@
+name: PR Preview
+
+on:
+  pull_request:
+    paths:
+      - 'con-duct-gallery.yaml'
+      - 'src/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install con-duct
+
+      - name: Generate gallery
+        id: generate
+        run: |
+          con-duct-gallery generate --verbose
+          echo "Gallery generated successfully"
+        continue-on-error: true
+
+      - name: Check generation status
+        run: |
+          if [ "${{ steps.generate.outcome }}" == "failure" ]; then
+            echo "::warning::Gallery generation failed, but continuing to show partial results"
+          fi
+
+      - name: Post preview comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 🔍 Gallery Preview\n\n';
+
+            if ('${{ steps.generate.outcome }}' === 'failure') {
+              comment += '⚠️ **Warning**: Gallery generation encountered errors.\n\n';
+            } else {
+              comment += '✅ Gallery generated successfully.\n\n';
+            }
+
+            // Count examples and tags
+            const readme = fs.readFileSync('README.md', 'utf8');
+            const exampleCount = (readme.match(/^### /gm) || []).length;
+            const tagMatches = readme.match(/^\*\*\w+\*\*:/gm) || [];
+            const tagCount = tagMatches.length;
+
+            comment += `**Summary**:\n`;
+            comment += `- Examples: ${exampleCount}\n`;
+            comment += `- Tags: ${tagCount}\n\n`;
+
+            comment += `View the full generated README.md in the Files Changed tab.`;
+
+            // Post comment
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
