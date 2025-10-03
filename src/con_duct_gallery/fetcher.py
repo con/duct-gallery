@@ -76,8 +76,10 @@ def parse_output_paths(info_json: dict, base_url: str) -> dict[str, str]:
             if rel_path.startswith('http'):
                 file_urls[key] = rel_path
             else:
-                # Relative path - combine with base directory
-                full_path = f"{base_dir}/{rel_path}"
+                # Relative path - use only filename since base_dir already points to the directory
+                from pathlib import Path as PathLib
+                filename = PathLib(rel_path).name
+                full_path = f"{base_dir}/{filename}"
                 file_urls[key] = f"{base_scheme_host}{full_path}"
 
     return file_urls
