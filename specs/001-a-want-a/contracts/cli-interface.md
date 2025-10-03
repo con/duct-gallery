@@ -29,11 +29,13 @@ con-duct-gallery generate [OPTIONS]
 
 | Code | Meaning |
 |------|---------|
-| 0 | Success - gallery generated |
+| 0 | Success - gallery generated, or --help displayed |
 | 1 | Invalid configuration (YAML parse error, validation failure) |
-| 2 | Fetch error (all examples failed to fetch) |
+| 2 | Missing or invalid arguments (argparse error) |
 | 3 | Plot error (all examples failed to plot) |
 | 4 | File system error (cannot write output) |
+
+**Note**: When running `con-duct-gallery` without a subcommand, argparse will display usage and exit with code 2.
 
 ### Output
 
@@ -186,6 +188,24 @@ def test_cli_custom_paths():
     ])
     assert args.config == Path('custom.yaml')
     assert args.output == Path('GALLERY.md')
+
+def test_cli_no_subcommand_shows_error():
+    """Test that running without subcommand shows usage and exits with error"""
+    with pytest.raises(SystemExit) as exc_info:
+        parse_args([])
+    assert exc_info.value.code == 2  # argparse uses exit code 2 for errors
+
+def test_cli_help_exits_cleanly():
+    """Test that --help exits with code 0"""
+    with pytest.raises(SystemExit) as exc_info:
+        parse_args(['--help'])
+    assert exc_info.value.code == 0
+
+def test_main_handles_missing_subcommand():
+    """Test that main() handles missing subcommand gracefully"""
+    with patch.object(sys, 'argv', ['con-duct-gallery']):
+        exit_code = main()
+        assert exit_code == 2  # argparse error code
 ```
 
 **Integration tests** (`tests/integration/test_end_to_end.py`):

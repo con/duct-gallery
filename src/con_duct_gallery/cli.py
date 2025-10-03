@@ -18,7 +18,11 @@ def parse_args(args: list[str] = None) -> argparse.Namespace:
         description='Generate markdown gallery of con/duct examples'
     )
 
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    subparsers = parser.add_subparsers(
+        dest='command',
+        help='Available commands',
+        required=True
+    )
 
     # Generate subcommand
     generate_parser = subparsers.add_parser(

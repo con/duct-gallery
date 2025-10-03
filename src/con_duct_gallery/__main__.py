@@ -27,7 +27,11 @@ def main() -> int:
         Exit code: 0 (success), 1 (config error), 2 (fetch error),
                   3 (plot error), 4 (file system error)
     """
-    args = parse_args()
+    try:
+        args = parse_args()
+    except SystemExit as e:
+        # argparse calls sys.exit() on error or --help
+        return e.code if e.code is not None else 0
 
     # Setup logging
     setup_logging(args.verbose)

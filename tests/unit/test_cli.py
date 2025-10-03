@@ -60,3 +60,56 @@ def test_cli_dry_run():
 
     args = parse_args(['generate', '--dry-run'])
     assert args.dry_run is True
+
+
+def test_cli_no_subcommand_shows_error():
+    """Test that running without subcommand shows usage and exits with error."""
+    from con_duct_gallery.cli import parse_args
+
+    with pytest.raises(SystemExit) as exc_info:
+        parse_args([])
+
+    assert exc_info.value.code == 2  # argparse uses exit code 2 for errors
+
+
+def test_cli_help_exits_cleanly():
+    """Test that --help exits with code 0."""
+    from con_duct_gallery.cli import parse_args
+
+    with pytest.raises(SystemExit) as exc_info:
+        parse_args(['--help'])
+
+    assert exc_info.value.code == 0
+
+
+def test_cli_generate_help_exits_cleanly():
+    """Test that generate --help exits with code 0."""
+    from con_duct_gallery.cli import parse_args
+
+    with pytest.raises(SystemExit) as exc_info:
+        parse_args(['generate', '--help'])
+
+    assert exc_info.value.code == 0
+
+
+def test_main_handles_missing_subcommand():
+    """Test that main() handles missing subcommand gracefully."""
+    from con_duct_gallery.__main__ import main
+    import sys
+    from unittest.mock import patch
+
+    # Mock sys.argv to simulate no arguments
+    with patch.object(sys, 'argv', ['con-duct-gallery']):
+        exit_code = main()
+        assert exit_code == 2  # argparse error code
+
+
+def test_main_handles_help_flag():
+    """Test that main() returns 0 for --help."""
+    from con_duct_gallery.__main__ import main
+    import sys
+    from unittest.mock import patch
+
+    with patch.object(sys, 'argv', ['con-duct-gallery', '--help']):
+        exit_code = main()
+        assert exit_code == 0
