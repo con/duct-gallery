@@ -12,4 +12,10 @@ examples:
     tags:
       - synthetic
       - asmacdo
+  - title: asmacdo-gallery example-2
+    source_repo: https://github.com/asmacdo/asmacdo-duct-gallery/
+    info_file: "https://raw.githubusercontent.com/asmacdo/asmacdo-duct-gallery/2723a6a03114924eb53065426da334d473e07919/tests/fixtures/gallery/example-2/.duct/runinfo.json"
+    tags:
+      - synthetic
+      - asmacdo
      
