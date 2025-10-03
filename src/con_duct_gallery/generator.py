@@ -49,13 +49,13 @@ def generate_header(timestamp: str) -> str:
 
 
 def generate_tag_index(registry: ExampleRegistry) -> str:
-    """Generate tag index section with hyperlinks to examples.
+    """Generate tag index section with subsections for each tag.
 
     Args:
         registry: Example registry
 
     Returns:
-        Markdown tag index section
+        Markdown tag index section with #### subsections
     """
     lines = ["## 📚 Browse by Tag\n"]
 
@@ -63,14 +63,18 @@ def generate_tag_index(registry: ExampleRegistry) -> str:
     tags = sorted(registry.get_all_tags())
 
     for tag in tags:
+        # Create subsection for this tag
+        lines.append(f"#### {tag}\n")
+
         # Get examples with this tag
         examples = registry.filter_by_tag(tag)
+
         # Generate links
         links = [f"[{e.title}](#{slugify(e.title)})" for e in examples]
-        line = f"**{tag}**: {', '.join(links)}"
+        line = ', '.join(links)
         lines.append(line)
+        lines.append("")  # Empty line after each tag
 
-    lines.append("")  # Empty line after section
     return "\n".join(lines)
 
 
@@ -93,10 +97,10 @@ def generate_example_section(
     """
     lines = [f"### {example.title}\n"]
 
-    # Tags
+    # Tags - as hyperlinks to Browse by Tag section
     if example.tags:
-        tag_badges = " ".join(f"`{tag}`" for tag in example.tags)
-        lines.append(f"**Tags**: {tag_badges}")
+        tag_links = " ".join(f"[`{tag}`](#{tag})" for tag in example.tags)
+        lines.append(f"**Tags**: {tag_links}")
 
     # Repository link (only if not empty)
     repo_url = str(example.source_repo)

@@ -14,7 +14,7 @@ def test_slugify():
 
 
 def test_tag_index_generation():
-    """Test tag index section with multiple tags."""
+    """Test tag index section with multiple tags as subsections."""
     from con_duct_gallery.generator import generate_tag_index
     from con_duct_gallery.models import ExampleEntry, ExampleRegistry
 
@@ -34,8 +34,13 @@ def test_tag_index_generation():
 
     markdown = generate_tag_index(registry)
 
-    assert "**tag1**: [Example A](#example-a), [Example B](#example-b)" in markdown
-    assert "**tag2**: [Example A](#example-a)" in markdown
+    # Check for subsection headers
+    assert "#### tag1" in markdown
+    assert "#### tag2" in markdown
+
+    # Check for example links under tags
+    assert "[Example A](#example-a), [Example B](#example-b)" in markdown
+    assert "[Example A](#example-a)" in markdown
 
 
 def test_example_section_with_plot():
@@ -62,7 +67,7 @@ def test_example_section_with_plot():
     markdown = generate_example_section(example, svg_exists=True, log_paths=log_paths, image_dir="images")
 
     assert "### Test Example" in markdown
-    assert "**Tags**: `demo`" in markdown
+    assert "**Tags**: [`demo`](#demo)" in markdown
     assert "[github.com/test/repo](https://github.com/test/repo)" in markdown
     assert "Test description" in markdown
     assert "![Plot for Test Example](images/test-example.svg)" in markdown
