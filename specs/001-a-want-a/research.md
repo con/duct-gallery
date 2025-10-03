@@ -148,7 +148,7 @@ on:
 on:
   pull_request:
     paths:
-      - 'examples.yaml'
+      - 'con-duct-gallery.yaml'
       - 'src/**'
 ```
 - Generates gallery in PR context
@@ -246,7 +246,7 @@ dist/
 ```
 README.md          # Generated gallery
 images/            # SVG plots
-examples.yaml      # Source of truth
+con-duct-gallery.yaml      # Source of truth
 ```
 
 ## Summary of Technical Stack

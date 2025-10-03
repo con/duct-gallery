@@ -6,7 +6,7 @@
 ## Command: `con-duct-gallery generate`
 
 ### Purpose
-Generate the gallery README.md and plot images from examples.yaml configuration.
+Generate the gallery README.md and plot images from con-duct-gallery.yaml configuration.
 
 ### Signature
 ```bash
@@ -18,7 +18,7 @@ con-duct-gallery generate [OPTIONS]
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `--force` | flag | False | Re-fetch logs and regenerate plots even if cached |
-| `--config` | path | `examples.yaml` | Path to YAML configuration file |
+| `--config` | path | `con-duct-gallery.yaml` | Path to YAML configuration file |
 | `--output` | path | `README.md` | Path for generated markdown file |
 | `--log-dir` | path | `logs/` | Directory for cached log files |
 | `--image-dir` | path | `images/` | Directory for generated SVG plots |
@@ -39,7 +39,7 @@ con-duct-gallery generate [OPTIONS]
 
 **stdout** (normal mode):
 ```
-✓ Loaded 3 examples from examples.yaml
+✓ Loaded 3 examples from con-duct-gallery.yaml
 ✓ Fetched logs for "con/duct Demo Example" (4 files)
 ✓ Generated plot: images/con-duct-demo-example.svg
 ✓ Fetched logs for "Example 2" (cached)
@@ -49,7 +49,7 @@ con-duct-gallery generate [OPTIONS]
 
 **stdout** (verbose mode):
 ```
-[INFO] Loading configuration from examples.yaml
+[INFO] Loading configuration from con-duct-gallery.yaml
 [DEBUG] Validating 3 examples
 [INFO] Processing "con/duct Demo Example"
 [DEBUG] Fetching https://raw.githubusercontent.com/.../example_output_info.json
@@ -75,7 +75,7 @@ con-duct-gallery generate [OPTIONS]
 ### Behavior
 
 #### First Run (empty cache):
-1. Load and validate `examples.yaml`
+1. Load and validate `con-duct-gallery.yaml`
 2. For each example:
    - Fetch info JSON
    - Parse `output_paths` to discover related files
@@ -90,7 +90,7 @@ con-duct-gallery generate [OPTIONS]
 4. Write README.md to output path
 
 #### Subsequent Runs (with cache):
-1. Load and validate `examples.yaml`
+1. Load and validate `con-duct-gallery.yaml`
 2. For each example:
    - Check if `logs/{example-slug}/` exists
      - Yes → skip fetch (unless `--force`)
@@ -129,14 +129,14 @@ con-duct-gallery generate [OPTIONS]
 #### Basic usage:
 ```bash
 $ con-duct-gallery generate
-✓ Loaded 5 examples from examples.yaml
+✓ Loaded 5 examples from con-duct-gallery.yaml
 ✓ Generated README.md with 5 examples, 8 tags
 ```
 
 #### Force regeneration:
 ```bash
 $ con-duct-gallery generate --force
-✓ Loaded 5 examples from examples.yaml
+✓ Loaded 5 examples from con-duct-gallery.yaml
 ✓ Re-fetched all logs (20 files)
 ✓ Regenerated all plots (5 SVGs)
 ✓ Generated README.md with 5 examples, 8 tags
@@ -156,7 +156,7 @@ $ con-duct-gallery generate \
 $ con-duct-gallery generate --dry-run
 [DRY RUN] Would fetch logs for 3 examples
 [DRY RUN] Would generate 3 plots
-[DRY RUN] Would write README.md (estimated 12 KB)
+[DRY RUN] Would write README.md
 ```
 
 ### Testing Contract
@@ -166,7 +166,7 @@ $ con-duct-gallery generate --dry-run
 def test_cli_defaults():
     """Test default argument values"""
     args = parse_args(['generate'])
-    assert args.config == Path('examples.yaml')
+    assert args.config == Path('con-duct-gallery.yaml')
     assert args.output == Path('README.md')
     assert args.force is False
 

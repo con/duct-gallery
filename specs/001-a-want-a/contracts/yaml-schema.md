@@ -187,13 +187,13 @@ class ExampleRegistry(BaseModel):
 
 ### Invalid YAML syntax:
 ```
-Error: Invalid YAML syntax in examples.yaml:
+Error: Invalid YAML syntax in con-duct-gallery.yaml:
   Line 5: mapping values are not allowed here
 ```
 
 ### Validation errors:
 ```
-Error: Validation failed for examples.yaml:
+Error: Validation failed for con-duct-gallery.yaml:
   examples[0].title: Title cannot be empty
   examples[1].tags[0]: Tag "Has Spaces" must be alphanumeric + hyphens only
   examples[2].info_file: info_file must end with .json
@@ -201,7 +201,7 @@ Error: Validation failed for examples.yaml:
 
 ### Duplicate titles:
 ```
-Error: Validation failed for examples.yaml:
+Error: Validation failed for con-duct-gallery.yaml:
   examples: Duplicate titles found: ['demo example']
 ```
 

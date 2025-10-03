@@ -48,7 +48,7 @@ optional arguments:
 
 ## Quick Start: Generate Gallery
 
-### Step 1: Create configuration (examples.yaml)
+### Step 1: Create configuration (con-duct-gallery.yaml)
 
 ```yaml
 examples:
@@ -69,7 +69,7 @@ con-duct-gallery generate
 
 Expected output:
 ```
-✓ Loaded 1 example from examples.yaml
+✓ Loaded 1 example from con-duct-gallery.yaml
 ✓ Fetching logs for "con/duct Demo Example"
   ├─ Downloading example_output_info.json
   ├─ Downloading example_output_usage.json
@@ -95,7 +95,7 @@ After running `generate`, you should see:
 
 ```
 con-duct-gallery/
-├── examples.yaml                 # Your configuration
+├── con-duct-gallery.yaml                 # Your configuration
 ├── README.md                      # ✅ Generated gallery
 ├── images/                        # ✅ Generated
 │   └── con-duct-demo-example.svg
@@ -157,7 +157,7 @@ Demo example from the con/duct repository showing resource usage tracking
 
 ### Add a new example
 
-1. Edit `examples.yaml`:
+1. Edit `con-duct-gallery.yaml`:
 ```yaml
 examples:
   # Existing examples...
@@ -257,7 +257,7 @@ con-duct-gallery generate
 
 Expected output:
 ```
-✓ Loaded 1 example from examples.yaml
+✓ Loaded 1 example from con-duct-gallery.yaml
 ✗ Failed to fetch "Broken Example": HTTP 404 / Connection error
 ⚠️  Skipping example "Broken Example"
 ✓ Generated README.md with 0 examples, 0 tags
@@ -314,7 +314,7 @@ When running `quickstart.md` as an integration test:
 - [ ] Repository clones successfully
 - [ ] `pip install -e .` completes without errors
 - [ ] `con-duct-gallery --help` shows help text
-- [ ] Creating `examples.yaml` with demo example
+- [ ] Creating `con-duct-gallery.yaml` with demo example
 - [ ] `con-duct-gallery generate` runs successfully
 - [ ] `README.md` is created
 - [ ] `images/con-duct-demo-example.svg` exists and is valid SVG
@@ -343,7 +343,7 @@ All times assume:
 ## Next Steps
 
 - **Automate**: Set up GitHub Actions (see `.github/workflows/`)
-- **Customize**: Add more examples to `examples.yaml`
+- **Customize**: Add more examples to `con-duct-gallery.yaml`
 - **Contribute**: Create a pull request with new examples
 - **Deploy**: Push to GitHub, gallery auto-renders
 

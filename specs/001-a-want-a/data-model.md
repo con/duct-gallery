@@ -190,7 +190,7 @@ images/
     ├── {example-slug}.svg
     └── {another-example}.svg
 
-examples.yaml
+con-duct-gallery.yaml
 README.md
 ```
 

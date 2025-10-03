@@ -41,7 +41,7 @@ Create an automated gallery of con/duct tool usage examples. Fetch con/duct log 
 **Target Platform**: GitHub Actions (Linux), local development (cross-platform)
 **Project Type**: single (Python CLI tool)
 **Project Name**: con-duct-gallery (entry point: `con-duct-gallery`)
-**Configuration**: YAML file (`examples.yaml`) defining example sources, tags, plot options
+**Configuration**: YAML file (`con-duct-gallery.yaml`) defining example sources, tags, plot options
 **Markdown Flavor**: GitHub Flavored Markdown with unicode characters
 **Performance Goals**: Gallery generation <5 minutes for 50 examples
 **Constraints**: No PyPI distribution, GitHub-first design, incremental updates, SVG plots only
@@ -114,7 +114,7 @@ con-duct-gallery/
 │   └── workflows/
 │       ├── daily-update.yml      # Cron: daily gallery regeneration
 │       └── pr-preview.yml        # PR: generate and comment preview
-├── examples.yaml                 # Example registry (YAML)
+├── con-duct-gallery.yaml         # Example registry (YAML)
 ├── logs/                         # Fetched con/duct logs (gitignored)
 ├── images/                       # Generated SVG plots
 ├── README.md                     # Generated gallery (root)
@@ -213,7 +213,7 @@ con-duct-gallery/
    - pr-preview.yml workflow
 
 7. **Documentation** (1 task):
-   - Initial examples.yaml with demo example
+   - Initial con-duct-gallery.yaml with demo example
 
 **Ordering Strategy**:
 - Phase 3.1: Setup (sequential)

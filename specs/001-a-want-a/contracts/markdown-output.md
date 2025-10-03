@@ -52,7 +52,7 @@ Description text here (if provided)
 
 This gallery is automatically updated daily via GitHub Actions.
 
-- **Add an example**: Edit `examples.yaml` and create a pull request
+- **Add an example**: Edit `con-duct-gallery.yaml` and create a pull request
 - **Update plots**: Plots regenerate automatically when logs change
 - **Force update**: Re-run the workflow with `workflow_dispatch`
 ```
@@ -134,7 +134,7 @@ Optional description paragraph(s) in markdown.
 
 This gallery is automatically updated daily via GitHub Actions.
 
-- **Add an example**: Edit `examples.yaml` and create a pull request
+- **Add an example**: Edit `con-duct-gallery.yaml` and create a pull request
 - **Update plots**: Plots regenerate automatically when logs change
 - **Force update**: Re-run the workflow with `workflow_dispatch`
 ```
