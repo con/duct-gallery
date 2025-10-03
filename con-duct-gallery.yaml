@@ -18,4 +18,10 @@ examples:
     tags:
       - synthetic
       - asmacdo
-     
+  - title: "'s5cmd sync' dry invocation on a mighty dandiarchive bucket"
+    source_repo: ""
+    info_file: "logs/s5cmd-1/2024.10.28T11.08.51-2733714_info.json"
+    tags:
+      - local
+      - s5cmd
+
