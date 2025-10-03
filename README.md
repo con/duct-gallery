@@ -1,14 +1,16 @@
 # con/duct Examples Gallery
 
 > 🤖 Automatically generated gallery of con/duct usage examples
-> Last updated: 2025-10-03 18:36 UTC
+> Last updated: 2025-10-03 18:48 UTC
 
 
 ## 📚 Browse by Tag
 
 **asmacdo**: [asmacdo-gallery example-1](#asmacdo-gallery-example-1), [asmacdo-gallery example-2](#asmacdo-gallery-example-2)
+**juelich**: [mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
 **local**: ['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket)
 **medium-length**: [con/duct Demo Example](#con-duct-demo-example)
+**mriqc**: [mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
 **s5cmd**: ['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket)
 **synthetic**: [con/duct Demo Example](#con-duct-demo-example), [asmacdo-gallery example-1](#asmacdo-gallery-example-1), [asmacdo-gallery example-2](#asmacdo-gallery-example-2)
 
@@ -86,6 +88,25 @@ Demo example from the con/duct repository showing resource usage tracking
 - **Usage data**: [example_output_usage.json](/home/yoh/proj/CON/yarikoptic-duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_usage.json)
 - **Standard output**: [stdout](/home/yoh/proj/CON/yarikoptic-duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_stdout)
 - **Standard error**: [stderr](/home/yoh/proj/CON/yarikoptic-duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_stderr)
+
+</details>
+
+---
+
+### mriqc processing on a single subject/session
+
+**Tags**: `mriqc` `juelich`
+**Repository**: [cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc](https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc)
+
+![Plot for mriqc processing on a single subject/session](images/mriqc-processing-on-a-single-subject-session.svg)
+
+<details>
+<summary>📋 Metadata</summary>
+
+- **Info file**: [example_output_info.json](logs/mriqc-processing-on-a-single-subjectsession/example_output_info.json)
+- **Usage data**: [example_output_usage.json](logs/mriqc-processing-on-a-single-subjectsession/example_output_usage.json)
+- **Standard output**: [stdout](logs/mriqc-processing-on-a-single-subjectsession/example_output_stdout)
+- **Standard error**: [stderr](logs/mriqc-processing-on-a-single-subjectsession/example_output_stderr)
 
 </details>
 
