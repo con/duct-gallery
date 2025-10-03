@@ -24,4 +24,9 @@ examples:
     tags:
       - local
       - s5cmd
-
+  - title: "mriqc processing on a single subject/session"
+    source_repo: "https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc"
+    info_file: "https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc/media/branch/base/logs/duct/sub-0001_2025.09.17T23.06.15-3344424_info.json"
+    tags:
+      - mriqc
+      - juelich
