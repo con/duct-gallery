@@ -63,6 +63,13 @@ Represents downloaded con/duct log files for an example.
 - Parsed from `output_paths` field in info JSON
 - All paths relative to `local_log_dir`
 
+**Important Note on Path Resolution**:
+The `output_paths` field in `*_info.json` contains full relative paths from the original working directory (e.g., `"usage": "demo/example_output_usage.json"`). However, when constructing URLs to fetch these files:
+- The base URL is derived from the `info_file` URL (e.g., `https://raw.githubusercontent.com/con/duct/abc123/demo/`)
+- Only the **filename** (basename) from `output_paths` is used, not the full relative path
+- This prevents path duplication (e.g., `demo/demo/example_output_usage.json`)
+- Example: `demo/example_output_usage.json` → `https://raw.githubusercontent.com/con/duct/abc123/demo/example_output_usage.json`
+
 **Validation**:
 - All files must exist after fetch
 - JSON files must parse successfully
