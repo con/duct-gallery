@@ -1,13 +1,14 @@
 # con/duct Examples Gallery
 
 > 🤖 Automatically generated gallery of con/duct usage examples
-> Last updated: 2025-10-03 17:55 UTC
+> Last updated: 2025-10-03 18:08 UTC
 
 
 ## 📚 Browse by Tag
 
+**asmacdo**: [asmacdo-gallery example-1](#asmacdo-gallery-example-1)
 **medium-length**: [con/duct Demo Example](#con-duct-demo-example)
-**synthetic**: [con/duct Demo Example](#con-duct-demo-example)
+**synthetic**: [con/duct Demo Example](#con-duct-demo-example), [asmacdo-gallery example-1](#asmacdo-gallery-example-1)
 
 ## 📊 Examples
 
@@ -27,6 +28,25 @@ Demo example from the con/duct repository showing resource usage tracking
 - **Usage data**: [example_output_usage.json](logs/con-duct-demo-example/example_output_usage.json)
 - **Standard output**: [stdout](logs/con-duct-demo-example/example_output_stdout)
 - **Standard error**: [stderr](logs/con-duct-demo-example/example_output_stderr)
+
+</details>
+
+---
+
+### asmacdo-gallery example-1
+
+**Tags**: `synthetic` `asmacdo`
+**Repository**: [github.com/asmacdo/asmacdo-duct-gallery](https://github.com/asmacdo/asmacdo-duct-gallery/)
+
+![Plot for asmacdo-gallery example-1](images/asmacdo-gallery-example-1.svg)
+
+<details>
+<summary>📋 Metadata</summary>
+
+- **Info file**: [example_output_info.json](logs/asmacdo-gallery-example-1/example_output_info.json)
+- **Usage data**: [example_output_usage.json](logs/asmacdo-gallery-example-1/example_output_usage.json)
+- **Standard output**: [stdout](logs/asmacdo-gallery-example-1/example_output_stdout)
+- **Standard error**: [stderr](logs/asmacdo-gallery-example-1/example_output_stderr)
 
 </details>
 
