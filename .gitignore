@@ -1,5 +1,5 @@
-# Fetched logs (reproducible from sources)
-logs/
+# Fetched logs (reproducible from sources but cached locally)
+# logs/
 
 # Python
 __pycache__/
