@@ -72,9 +72,9 @@ A researcher or developer wants to collect and showcase examples of con/duct too
 
 ### Functional Requirements
 - **FR-001**: System MUST maintain a registry of con/duct example entries
-- **FR-002**: System MUST fetch con/duct log files from online resources (GitHub repositories, DataLad datasets) to local storage
-- **FR-003**: System MUST parse the `output_paths` field from con/duct info JSON files to discover and fetch all related log files (usage, stdout, stderr)
-- **FR-004**: System MUST store references to the source location (GitHub repo URL, DataLad dataset identifier) for each example
+- **FR-002**: System MUST fetch con/duct log files from online resources (GitHub repositories, DataLad datasets) to local storage OR use local file paths directly
+- **FR-003**: System MUST parse the `output_paths` field from con/duct info JSON files to discover and fetch all related log files (usage, stdout, stderr) from remote sources OR resolve them as local relative paths
+- **FR-004**: System MAY store references to the source location (GitHub repo URL, DataLad dataset identifier) for each example; source_repo is optional and may be empty for local-only examples
 - **FR-005**: System MUST generate plot images from con/duct logs using the `con-duct plot` command
 - **FR-006**: System MUST support passing an arbitrary list of command-line options to the `con-duct plot` command on a per-example basis
 - **FR-007**: System MUST allow tagging examples with multiple tags for categorization
@@ -89,10 +89,10 @@ A researcher or developer wants to collect and showcase examples of con/duct too
 - **FR-016**: System MUST provide a force mode to re-fetch and regenerate examples regardless of local presence
 
 ### Key Entities *(include if feature involves data)*
-- **Example Entry**: Represents a single con/duct usage example; contains title, source reference (GitHub/DataLad URL), local log file path, tags, plot options, and generated plot image paths
+- **Example Entry**: Represents a single con/duct usage example; contains title, optional source reference (GitHub/DataLad URL), local or remote log file path, tags, plot options, and generated plot image paths
 - **Example Registry**: Collection of all example entries; serves as the central index
 - **Tag**: Categorization label applied to examples; enables grouping and organization
-- **Source Reference**: Link to the origin of the con/duct log (GitHub repository URL or DataLad dataset identifier)
+- **Source Reference**: Optional link to the origin of the con/duct log (GitHub repository URL or DataLad dataset identifier); may be empty for local-only examples
 - **Plot Image**: Rendered visualization generated from a con/duct log file using `con-duct plot` command
 - **Gallery Output**: The generated README.md file and associated images directory that forms the browseable gallery
 

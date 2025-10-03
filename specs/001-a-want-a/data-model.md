@@ -13,16 +13,16 @@ Represents a single con/duct usage example in the gallery.
 
 **Fields**:
 - `title` (str, required): Human-readable name (e.g., "con/duct Demo Example")
-- `source_repo` (HttpUrl, required): GitHub/GitLab repository URL
-- `info_file` (HttpUrl, required): URL to `*_info.json` file
+- `source_repo` (HttpUrl | str, optional): GitHub/GitLab repository URL or empty string for local-only examples
+- `info_file` (HttpUrl | str, required): URL to `*_info.json` file OR local file path relative to repository root
 - `tags` (list[str], optional): Categorization tags (e.g., ["synthetic", "medium-length"])
 - `plot_options` (list[str], optional): Additional CLI args for `con-duct plot`
 - `description` (str, optional): Markdown-formatted description
 
 **Validation Rules**:
 - `title`: Non-empty, max 100 characters
-- `source_repo`: Valid HTTP(S) URL
-- `info_file`: Valid HTTP(S) URL, must end with `.json`
+- `source_repo`: Valid HTTP(S) URL OR empty string (for local examples)
+- `info_file`: Valid HTTP(S) URL OR valid local file path, must end with `.json`
 - `tags`: Each tag lowercase alphanumeric + hyphens, no spaces
 - `plot_options`: Each item non-empty string
 
@@ -125,11 +125,12 @@ ExampleRegistry
 ### ExampleEntry
 ```python
 from pydantic import BaseModel, HttpUrl, field_validator
+from typing import Union
 
 class ExampleEntry(BaseModel):
     title: str
-    source_repo: HttpUrl
-    info_file: HttpUrl
+    source_repo: Union[HttpUrl, str] = ""
+    info_file: Union[HttpUrl, str]
     tags: list[str] = []
     plot_options: list[str] = []
     description: str = ""
@@ -141,6 +142,13 @@ class ExampleEntry(BaseModel):
             raise ValueError('Title cannot be empty')
         if len(v) > 100:
             raise ValueError('Title must be ≤100 characters')
+        return v
+
+    @field_validator('info_file')
+    @classmethod
+    def validate_info_file(cls, v):
+        if not str(v).endswith('.json'):
+            raise ValueError('info_file must end with .json')
         return v
 
     @field_validator('tags')
@@ -155,6 +163,11 @@ class ExampleEntry(BaseModel):
     def slug(self) -> str:
         """GitHub-compatible anchor slug"""
         return self.title.lower().replace(' ', '-').replace('/', '-')
+
+    @property
+    def is_local(self) -> bool:
+        """Check if info_file is a local path"""
+        return not str(self.info_file).startswith('http')
 ```
 
 ### ExampleRegistry

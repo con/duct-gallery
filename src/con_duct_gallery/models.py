@@ -2,7 +2,7 @@
 
 import re
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 import yaml
 from pydantic import BaseModel, HttpUrl, field_validator
 
@@ -11,8 +11,8 @@ class ExampleEntry(BaseModel):
     """Represents a single con/duct usage example in the gallery."""
 
     title: str
-    source_repo: HttpUrl
-    info_file: HttpUrl
+    source_repo: Union[HttpUrl, str] = ""
+    info_file: Union[HttpUrl, str]
     tags: list[str] = []
     plot_options: list[str] = []
     description: str = ""
@@ -30,7 +30,7 @@ class ExampleEntry(BaseModel):
 
     @field_validator('info_file')
     @classmethod
-    def validate_info_file(cls, v: HttpUrl) -> HttpUrl:
+    def validate_info_file(cls, v: Union[HttpUrl, str]) -> Union[HttpUrl, str]:
         """Validate info_file ends with .json."""
         if not str(v).endswith('.json'):
             raise ValueError('info_file must end with .json')
@@ -63,6 +63,11 @@ class ExampleEntry(BaseModel):
         # Remove leading/trailing hyphens
         slug = slug.strip('-')
         return slug
+
+    @property
+    def is_local(self) -> bool:
+        """Check if info_file is a local path."""
+        return not str(self.info_file).startswith('http')
 
 
 class ExampleRegistry(BaseModel):
