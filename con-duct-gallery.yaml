@@ -6,3 +6,10 @@ examples:
       - synthetic
       - medium-length
     description: "Demo example from the con/duct repository showing resource usage tracking"
+  - title: asmacdo-gallery example-1
+    source_repo: https://github.com/asmacdo/asmacdo-duct-gallery/
+    info_file: "https://raw.githubusercontent.com/asmacdo/asmacdo-duct-gallery/2723a6a03114924eb53065426da334d473e07919/tests/fixtures/gallery/example-1/.duct/runinfo.json"
+    tags:
+      - synthetic
+      - asmacdo
+     
