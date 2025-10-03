@@ -14,7 +14,8 @@
       "Bash(uv venv:*)",
       "Bash(uv pip install:*)",
       "Bash(uv run pytest:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
