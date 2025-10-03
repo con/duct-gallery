@@ -136,16 +136,16 @@ def fetch_log_files(
     force: bool = False,
     repo_root: Path = None
 ) -> FetchedLog:
-    """Download all log files for an example or copy from local paths.
+    """Download all log files for an example or use local paths directly.
 
     Args:
         example: Example entry to fetch logs for
-        log_dir: Base directory for storing logs
+        log_dir: Base directory for storing logs (used for remote files only)
         force: If True, re-fetch even if files exist
         repo_root: Repository root path for local files (defaults to cwd)
 
     Returns:
-        FetchedLog with paths to all downloaded files
+        FetchedLog with paths to all files (local or downloaded)
 
     Raises:
         requests.HTTPError: If any download fails
@@ -154,70 +154,78 @@ def fetch_log_files(
     if repo_root is None:
         repo_root = Path.cwd()
 
-    # Create subdirectory for this example
-    example_dir = log_dir / example.slug
-    example_dir.mkdir(parents=True, exist_ok=True)
-
-    # Define file paths
-    info_path = example_dir / "example_output_info.json"
-    usage_path = example_dir / "example_output_usage.json"
-    stdout_path = example_dir / "example_output_stdout"
-    stderr_path = example_dir / "example_output_stderr"
-
-    # Check if files exist and skip if not forcing
-    if not force and all(p.exists() for p in [info_path, usage_path, stdout_path, stderr_path]):
-        logger.info(f"Using cached logs for '{example.title}'")
-        return FetchedLog(info_path, usage_path, stdout_path, stderr_path)
-
-    logger.info(f"Fetching logs for '{example.title}'")
-
-    # Fetch and parse info JSON (handles both remote and local)
-    info_json = fetch_info_json(str(example.info_file), info_path, repo_root)
-
-    # Parse output_paths to get other file URLs/paths
-    file_paths = parse_output_paths(info_json, str(example.info_file), repo_root)
-
     # Check if we're working with local or remote files
     is_local = example.is_local
 
-    # Fetch/copy usage, stdout, stderr
-    if 'usage' in file_paths:
-        if is_local:
-            source = Path(file_paths['usage'])
-            if not source.exists():
-                raise FileNotFoundError(f"Local usage file not found: {source}")
-            usage_path.write_text(source.read_text())
-            logger.debug(f"  ├─ Copied usage.json from local")
-        else:
+    if is_local:
+        # For local files, use the original directory structure without copying
+        info_file_path = repo_root / example.info_file
+
+        if not info_file_path.exists():
+            raise FileNotFoundError(f"Local info file not found: {info_file_path}")
+
+        logger.info(f"Using local logs for '{example.title}'")
+
+        # Parse info JSON to get other file paths
+        content = info_file_path.read_text()
+        info_json = json.loads(content)
+        file_paths = parse_output_paths(info_json, str(example.info_file), repo_root)
+
+        # Use the original local paths directly
+        info_path = info_file_path
+        usage_path = Path(file_paths.get('usage', ''))
+        stdout_path = Path(file_paths.get('stdout', ''))
+        stderr_path = Path(file_paths.get('stderr', ''))
+
+        # Verify all files exist
+        for path, name in [(usage_path, 'usage'), (stdout_path, 'stdout'), (stderr_path, 'stderr')]:
+            if path and not path.exists():
+                raise FileNotFoundError(f"Local {name} file not found: {path}")
+
+        logger.debug(f"  └─ Using local files from {info_path.parent}")
+        return FetchedLog(info_path, usage_path, stdout_path, stderr_path)
+    else:
+        # Remote files - download to log_dir
+        # Create subdirectory for this example
+        example_dir = log_dir / example.slug
+        example_dir.mkdir(parents=True, exist_ok=True)
+
+        # Define file paths
+        info_path = example_dir / "example_output_info.json"
+        usage_path = example_dir / "example_output_usage.json"
+        stdout_path = example_dir / "example_output_stdout"
+        stderr_path = example_dir / "example_output_stderr"
+
+        # Check if files exist and skip if not forcing
+        if not force and all(p.exists() for p in [info_path, usage_path, stdout_path, stderr_path]):
+            logger.info(f"Using cached logs for '{example.title}'")
+            return FetchedLog(info_path, usage_path, stdout_path, stderr_path)
+
+        logger.info(f"Fetching logs for '{example.title}'")
+
+        # Fetch and parse info JSON
+        info_json = fetch_info_json(str(example.info_file), info_path, repo_root)
+
+        # Parse output_paths to get other file URLs
+        file_paths = parse_output_paths(info_json, str(example.info_file), repo_root)
+
+        # Fetch usage, stdout, stderr
+        if 'usage' in file_paths:
             response = requests.get(file_paths['usage'], timeout=30)
             response.raise_for_status()
             usage_path.write_text(response.text)
             logger.debug(f"  ├─ Downloaded usage.json")
 
-    if 'stdout' in file_paths:
-        if is_local:
-            source = Path(file_paths['stdout'])
-            if not source.exists():
-                raise FileNotFoundError(f"Local stdout file not found: {source}")
-            stdout_path.write_text(source.read_text())
-            logger.debug(f"  ├─ Copied stdout from local")
-        else:
+        if 'stdout' in file_paths:
             response = requests.get(file_paths['stdout'], timeout=30)
             response.raise_for_status()
             stdout_path.write_text(response.text)
             logger.debug(f"  ├─ Downloaded stdout")
 
-    if 'stderr' in file_paths:
-        if is_local:
-            source = Path(file_paths['stderr'])
-            if not source.exists():
-                raise FileNotFoundError(f"Local stderr file not found: {source}")
-            stderr_path.write_text(source.read_text())
-            logger.debug(f"  └─ Copied stderr from local")
-        else:
+        if 'stderr' in file_paths:
             response = requests.get(file_paths['stderr'], timeout=30)
             response.raise_for_status()
             stderr_path.write_text(response.text)
             logger.debug(f"  └─ Downloaded stderr")
 
-    return FetchedLog(info_path, usage_path, stdout_path, stderr_path)
+        return FetchedLog(info_path, usage_path, stdout_path, stderr_path)

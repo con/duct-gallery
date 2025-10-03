@@ -77,7 +77,7 @@ def generate_tag_index(registry: ExampleRegistry) -> str:
 def generate_example_section(
     example: ExampleEntry,
     svg_exists: bool,
-    log_dir: str,
+    log_paths: dict[str, Path],
     image_dir: str
 ) -> str:
     """Generate markdown section for a single example.
@@ -85,7 +85,7 @@ def generate_example_section(
     Args:
         example: Example entry
         svg_exists: Whether SVG plot file exists
-        log_dir: Directory containing log files
+        log_paths: Dictionary with 'info', 'usage', 'stdout', 'stderr' paths
         image_dir: Directory containing image files
 
     Returns:
@@ -98,11 +98,12 @@ def generate_example_section(
         tag_badges = " ".join(f"`{tag}`" for tag in example.tags)
         lines.append(f"**Tags**: {tag_badges}")
 
-    # Repository link
+    # Repository link (only if not empty)
     repo_url = str(example.source_repo)
-    # Extract domain and path for display
-    repo_display = repo_url.replace("https://", "").replace("http://", "").rstrip("/")
-    lines.append(f"**Repository**: [{repo_display}]({repo_url})")
+    if repo_url:
+        # Extract domain and path for display
+        repo_display = repo_url.replace("https://", "").replace("http://", "").rstrip("/")
+        lines.append(f"**Repository**: [{repo_display}]({repo_url})")
 
     lines.append("")  # Blank line
 
@@ -124,10 +125,10 @@ def generate_example_section(
     lines.append("<details>")
     lines.append("<summary>📋 Metadata</summary>")
     lines.append("")
-    lines.append(f"- **Info file**: [example_output_info.json]({log_dir}/{slug}/example_output_info.json)")
-    lines.append(f"- **Usage data**: [example_output_usage.json]({log_dir}/{slug}/example_output_usage.json)")
-    lines.append(f"- **Standard output**: [stdout]({log_dir}/{slug}/example_output_stdout)")
-    lines.append(f"- **Standard error**: [stderr]({log_dir}/{slug}/example_output_stderr)")
+    lines.append(f"- **Info file**: [example_output_info.json]({log_paths['info']})")
+    lines.append(f"- **Usage data**: [example_output_usage.json]({log_paths['usage']})")
+    lines.append(f"- **Standard output**: [stdout]({log_paths['stdout']})")
+    lines.append(f"- **Standard error**: [stderr]({log_paths['stderr']})")
 
     if example.plot_options:
         options_str = ", ".join(f"`{opt}`" for opt in example.plot_options)
@@ -159,14 +160,15 @@ This gallery is automatically updated daily via GitHub Actions.
 def generate_gallery(
     registry: ExampleRegistry,
     image_dir: Path,
-    log_dir: Path
+    example_log_paths: dict[str, dict[str, Path]]
 ) -> str:
     """Generate complete gallery markdown.
 
     Args:
         registry: Example registry
         image_dir: Directory containing image files
-        log_dir: Directory containing log files
+        example_log_paths: Dict mapping example titles to their log file paths
+                          (each with 'info', 'usage', 'stdout', 'stderr' keys)
 
     Returns:
         Complete README.md markdown content
@@ -186,10 +188,13 @@ def generate_gallery(
         svg_path = image_dir / f"{slug}.svg"
         svg_exists = svg_path.exists()
 
+        # Get log paths for this example
+        log_paths = example_log_paths.get(example.title, {})
+
         section = generate_example_section(
             example,
             svg_exists,
-            log_dir=str(log_dir),
+            log_paths=log_paths,
             image_dir=str(image_dir)
         )
         sections.append(section)

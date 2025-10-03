@@ -66,11 +66,20 @@ def main() -> int:
         # 2. Process each example
         fetch_failures = 0
         plot_failures = 0
+        example_log_paths = {}  # Store log paths for each example
 
         for example in registry.examples:
             try:
                 # Fetch logs
                 fetched_log = fetch_log_files(example, args.log_dir, args.force)
+
+                # Store log paths for this example
+                example_log_paths[example.title] = {
+                    'info': fetched_log.info_json,
+                    'usage': fetched_log.usage_json,
+                    'stdout': fetched_log.stdout,
+                    'stderr': fetched_log.stderr
+                }
 
                 # Generate plot if needed
                 slug = slugify(example.title)
@@ -104,7 +113,7 @@ def main() -> int:
         # 3. Generate README.md
         logger.info("Generating markdown gallery")
         try:
-            markdown = generate_gallery(registry, args.image_dir, args.log_dir)
+            markdown = generate_gallery(registry, args.image_dir, example_log_paths)
         except Exception as e:
             logger.error(f"Failed to generate gallery: {e}")
             return 4

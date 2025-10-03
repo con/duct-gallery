@@ -40,6 +40,7 @@ def test_tag_index_generation():
 
 def test_example_section_with_plot():
     """Test individual example rendering with plot."""
+    from pathlib import Path
     from con_duct_gallery.generator import generate_example_section
     from con_duct_gallery.models import ExampleEntry
 
@@ -51,7 +52,14 @@ def test_example_section_with_plot():
         description="Test description"
     )
 
-    markdown = generate_example_section(example, svg_exists=True, log_dir="logs", image_dir="images")
+    log_paths = {
+        'info': Path('logs/test-example/example_output_info.json'),
+        'usage': Path('logs/test-example/example_output_usage.json'),
+        'stdout': Path('logs/test-example/example_output_stdout'),
+        'stderr': Path('logs/test-example/example_output_stderr')
+    }
+
+    markdown = generate_example_section(example, svg_exists=True, log_paths=log_paths, image_dir="images")
 
     assert "### Test Example" in markdown
     assert "**Tags**: `demo`" in markdown
@@ -62,6 +70,7 @@ def test_example_section_with_plot():
 
 def test_example_section_without_plot():
     """Test warning message for missing plot."""
+    from pathlib import Path
     from con_duct_gallery.generator import generate_example_section
     from con_duct_gallery.models import ExampleEntry
 
@@ -71,7 +80,14 @@ def test_example_section_without_plot():
         info_file="https://example.com/info.json"
     )
 
-    markdown = generate_example_section(example, svg_exists=False, log_dir="logs", image_dir="images")
+    log_paths = {
+        'info': Path('logs/test-example/example_output_info.json'),
+        'usage': Path('logs/test-example/example_output_usage.json'),
+        'stdout': Path('logs/test-example/example_output_stdout'),
+        'stderr': Path('logs/test-example/example_output_stderr')
+    }
+
+    markdown = generate_example_section(example, svg_exists=False, log_paths=log_paths, image_dir="images")
 
     assert "⚠️" in markdown
     assert "Plot generation failed" in markdown or "not available" in markdown.lower()
