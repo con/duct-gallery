@@ -1,24 +1,44 @@
 # con/duct Examples Gallery
 
 > 🤖 Automatically generated gallery of con/duct usage examples
-> Last updated: 2025-10-03 18:48 UTC
+> Last updated: 2025-10-06 17:16 UTC
 
 
 ## 📚 Browse by Tag
 
-**asmacdo**: [asmacdo-gallery example-1](#asmacdo-gallery-example-1), [asmacdo-gallery example-2](#asmacdo-gallery-example-2)
-**juelich**: [mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
-**local**: ['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket)
-**medium-length**: [con/duct Demo Example](#con-duct-demo-example)
-**mriqc**: [mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
-**s5cmd**: ['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket)
-**synthetic**: [con/duct Demo Example](#con-duct-demo-example), [asmacdo-gallery example-1](#asmacdo-gallery-example-1), [asmacdo-gallery example-2](#asmacdo-gallery-example-2)
+#### asmacdo
+
+[asmacdo-gallery example-1](#asmacdo-gallery-example-1), [asmacdo-gallery example-2](#asmacdo-gallery-example-2)
+
+#### juelich
+
+[mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
+
+#### local
+
+['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket)
+
+#### medium-length
+
+[con/duct Demo Example](#con-duct-demo-example)
+
+#### mriqc
+
+[mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
+
+#### s5cmd
+
+['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket)
+
+#### synthetic
+
+[con/duct Demo Example](#con-duct-demo-example), [asmacdo-gallery example-1](#asmacdo-gallery-example-1), [asmacdo-gallery example-2](#asmacdo-gallery-example-2)
 
 ## 📊 Examples
 
 ### con/duct Demo Example
 
-**Tags**: `synthetic` `medium-length`
+**Tags**: [`synthetic`](#synthetic) [`medium-length`](#medium-length)
 **Repository**: [github.com/con/duct](https://github.com/con/duct/)
 
 Demo example from the con/duct repository showing resource usage tracking
@@ -39,7 +59,7 @@ Demo example from the con/duct repository showing resource usage tracking
 
 ### asmacdo-gallery example-1
 
-**Tags**: `synthetic` `asmacdo`
+**Tags**: [`synthetic`](#synthetic) [`asmacdo`](#asmacdo)
 **Repository**: [github.com/asmacdo/asmacdo-duct-gallery](https://github.com/asmacdo/asmacdo-duct-gallery/)
 
 ![Plot for asmacdo-gallery example-1](images/asmacdo-gallery-example-1.svg)
@@ -58,7 +78,7 @@ Demo example from the con/duct repository showing resource usage tracking
 
 ### asmacdo-gallery example-2
 
-**Tags**: `synthetic` `asmacdo`
+**Tags**: [`synthetic`](#synthetic) [`asmacdo`](#asmacdo)
 **Repository**: [github.com/asmacdo/asmacdo-duct-gallery](https://github.com/asmacdo/asmacdo-duct-gallery/)
 
 ![Plot for asmacdo-gallery example-2](images/asmacdo-gallery-example-2.svg)
@@ -77,7 +97,7 @@ Demo example from the con/duct repository showing resource usage tracking
 
 ### 's5cmd sync' dry invocation on a mighty dandiarchive bucket
 
-**Tags**: `local` `s5cmd`
+**Tags**: [`local`](#local) [`s5cmd`](#s5cmd)
 
 ![Plot for 's5cmd sync' dry invocation on a mighty dandiarchive bucket](images/s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket.svg)
 
@@ -95,7 +115,7 @@ Demo example from the con/duct repository showing resource usage tracking
 
 ### mriqc processing on a single subject/session
 
-**Tags**: `mriqc` `juelich`
+**Tags**: [`mriqc`](#mriqc) [`juelich`](#juelich)
 **Repository**: [cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc](https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc)
 
 ![Plot for mriqc processing on a single subject/session](images/mriqc-processing-on-a-single-subject-session.svg)
