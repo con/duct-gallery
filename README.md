@@ -1,7 +1,7 @@
 # con/duct Examples Gallery
 
 > 🤖 Automatically generated gallery of con/duct usage examples
-> Last updated: 2025-10-10 01:54 UTC
+> Last updated: 2025-10-11 01:49 UTC
 
 
 ## 📚 Browse by Tag
@@ -104,10 +104,10 @@ Demo example from the con/duct repository showing resource usage tracking
 <details>
 <summary>📋 Metadata</summary>
 
-- **Info file**: [example_output_info.json](/home/runner/work/yarikoptic-duct-gallery/yarikoptic-duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_info.json)
-- **Usage data**: [example_output_usage.json](/home/runner/work/yarikoptic-duct-gallery/yarikoptic-duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_usage.json)
-- **Standard output**: [stdout](/home/runner/work/yarikoptic-duct-gallery/yarikoptic-duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_stdout)
-- **Standard error**: [stderr](/home/runner/work/yarikoptic-duct-gallery/yarikoptic-duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_stderr)
+- **Info file**: [example_output_info.json](/home/runner/work/duct-gallery/duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_info.json)
+- **Usage data**: [example_output_usage.json](/home/runner/work/duct-gallery/duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_usage.json)
+- **Standard output**: [stdout](/home/runner/work/duct-gallery/duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_stdout)
+- **Standard error**: [stderr](/home/runner/work/duct-gallery/duct-gallery/logs/s5cmd-1/2024.10.28T11.08.51-2733714_stderr)
 
 </details>
 
