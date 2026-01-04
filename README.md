@@ -1,7 +1,7 @@
 # con/duct Examples Gallery
 
 > 🤖 Automatically generated gallery of con/duct usage examples
-> Last updated: 2026-01-03 02:07 UTC
+> Last updated: 2026-01-04 02:30 UTC
 
 
 ## 📚 Browse by Tag
