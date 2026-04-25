@@ -34,8 +34,14 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          if git diff --quiet README.md images/; then
-            echo "changed=false" >> $GITHUB_OUTPUT
+          if git diff --quiet images/; then
+            # No image changes; check if README change is only the timestamp line
+            non_timestamp_changes=$(git diff README.md | grep '^[+-]' | grep -v '^+++\|^---' | grep -v '^[+-]> Last updated:')
+            if [ -z "$non_timestamp_changes" ]; then
+              echo "changed=false" >> $GITHUB_OUTPUT
+            else
+              echo "changed=true" >> $GITHUB_OUTPUT
+            fi
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
