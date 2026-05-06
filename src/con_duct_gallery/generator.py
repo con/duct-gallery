@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 
-from .models import ExampleEntry, ExampleRegistry
+from .models import ExampleEntry, ExampleRegistry, PlotVariant
 
 
 def slugify(title: str) -> str:
@@ -82,15 +82,19 @@ def generate_example_section(
     example: ExampleEntry,
     svg_exists: bool,
     log_paths: dict[str, Path],
-    image_dir: str
+    image_dir: str,
+    variants: list[PlotVariant] = None,
+    variant_svg_exists: dict[str, bool] = None,
 ) -> str:
     """Generate markdown section for a single example.
 
     Args:
         example: Example entry
-        svg_exists: Whether SVG plot file exists
+        svg_exists: Whether the single-plot SVG file exists (when variants is None/empty)
         log_paths: Dictionary with 'info', 'usage', 'stdout', 'stderr' paths
         image_dir: Directory containing image files
+        variants: Plot variants to render side-by-side (if 2+ provided)
+        variant_svg_exists: Map from variant name to whether its SVG exists
 
     Returns:
         Markdown section for the example
@@ -116,12 +120,34 @@ def generate_example_section(
         lines.append(example.description)
         lines.append("")
 
-    # Plot image or warning
     slug = slugify(example.title)
-    if svg_exists:
-        lines.append(f"![Plot for {example.title}]({image_dir}/{slug}.svg)")
+
+    if variants and len(variants) >= 2:
+        # Side-by-side variants. GitHub renders inline HTML tables in markdown.
+        variant_svg_exists = variant_svg_exists or {}
+        lines.append("<table>")
+        header_cells = "".join(
+            f"<th align=\"center\">{v.display_label}</th>" for v in variants
+        )
+        lines.append(f"<tr>{header_cells}</tr>")
+        body_cells = []
+        for v in variants:
+            if variant_svg_exists.get(v.name, False):
+                body_cells.append(
+                    f"<td><img src=\"{image_dir}/{slug}__{v.name}.svg\" "
+                    f"alt=\"Plot for {example.title} ({v.display_label})\"></td>"
+                )
+            else:
+                body_cells.append(
+                    "<td>⚠️ <em>Plot not available</em></td>"
+                )
+        lines.append(f"<tr>{''.join(body_cells)}</tr>")
+        lines.append("</table>")
     else:
-        lines.append("> ⚠️ **Plot not available** - Generation failed or plot file missing")
+        if svg_exists:
+            lines.append(f"![Plot for {example.title}]({image_dir}/{slug}.svg)")
+        else:
+            lines.append("> ⚠️ **Plot not available** - Generation failed or plot file missing")
 
     lines.append("")
 
@@ -187,20 +213,37 @@ def generate_gallery(
     sections.append("## 📊 Examples\n")
 
     # Generate section for each example
+    variants = registry.variants
+    use_variants = len(variants) >= 2
+
     for example in registry.examples:
         slug = slugify(example.title)
-        svg_path = image_dir / f"{slug}.svg"
-        svg_exists = svg_path.exists()
 
         # Get log paths for this example
         log_paths = example_log_paths.get(example.title, {})
 
-        section = generate_example_section(
-            example,
-            svg_exists,
-            log_paths=log_paths,
-            image_dir=str(image_dir)
-        )
+        if use_variants:
+            variant_svg_exists = {
+                v.name: (image_dir / f"{slug}__{v.name}.svg").exists()
+                for v in variants
+            }
+            section = generate_example_section(
+                example,
+                svg_exists=False,
+                log_paths=log_paths,
+                image_dir=str(image_dir),
+                variants=variants,
+                variant_svg_exists=variant_svg_exists,
+            )
+        else:
+            svg_path = image_dir / f"{slug}.svg"
+            section = generate_example_section(
+                example,
+                svg_exists=svg_path.exists(),
+                log_paths=log_paths,
+                image_dir=str(image_dir),
+            )
+
         sections.append(section)
         sections.append("---\n")  # Separator
 

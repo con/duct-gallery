@@ -68,6 +68,9 @@ def main() -> int:
         plot_failures = 0
         example_log_paths = {}  # Store log paths for each example
 
+        variants = registry.variants
+        use_variants = len(variants) >= 2
+
         for example in registry.examples:
             try:
                 # Fetch logs
@@ -81,24 +84,50 @@ def main() -> int:
                     'stderr': fetched_log.stderr
                 }
 
-                # Generate plot if needed
                 slug = slugify(example.title)
-                svg_path = args.image_dir / f"{slug}.svg"
 
-                if should_regenerate_plot(svg_path, fetched_log.usage_json, args.force):
-                    try:
-                        logger.info(f"Generating plot for '{example.title}'")
-                        generate_plot(
-                            fetched_log.usage_json,
-                            svg_path,
-                            example.plot_options
-                        )
-                        logger.info(f"  ✓ Plot saved: {svg_path}")
-                    except Exception as e:
-                        logger.warning(f"  ✗ Plot generation failed: {e}")
-                        plot_failures += 1
+                if use_variants:
+                    for variant in variants:
+                        svg_path = args.image_dir / f"{slug}__{variant.name}.svg"
+                        if should_regenerate_plot(svg_path, fetched_log.usage_json, args.force):
+                            try:
+                                logger.info(
+                                    f"Generating plot for '{example.title}' "
+                                    f"[variant: {variant.name}]"
+                                )
+                                # Variant options come first; example-level options
+                                # follow so they can override if needed.
+                                plot_opts = list(variant.plot_options) + list(example.plot_options)
+                                generate_plot(
+                                    fetched_log.usage_json,
+                                    svg_path,
+                                    plot_opts,
+                                )
+                                logger.info(f"  ✓ Plot saved: {svg_path}")
+                            except Exception as e:
+                                logger.warning(f"  ✗ Plot generation failed: {e}")
+                                plot_failures += 1
+                        else:
+                            logger.info(
+                                f"Using cached plot for '{example.title}' "
+                                f"[variant: {variant.name}]"
+                            )
                 else:
-                    logger.info(f"Using cached plot for '{example.title}'")
+                    svg_path = args.image_dir / f"{slug}.svg"
+                    if should_regenerate_plot(svg_path, fetched_log.usage_json, args.force):
+                        try:
+                            logger.info(f"Generating plot for '{example.title}'")
+                            generate_plot(
+                                fetched_log.usage_json,
+                                svg_path,
+                                example.plot_options
+                            )
+                            logger.info(f"  ✓ Plot saved: {svg_path}")
+                        except Exception as e:
+                            logger.warning(f"  ✗ Plot generation failed: {e}")
+                            plot_failures += 1
+                    else:
+                        logger.info(f"Using cached plot for '{example.title}'")
 
             except Exception as e:
                 logger.warning(f"✗ Failed to fetch '{example.title}': {e}")
