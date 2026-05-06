@@ -1,7 +1,7 @@
 # con/duct Examples Gallery
 
 > 🤖 Automatically generated gallery of con/duct usage examples
-> Last updated: 2026-05-04 20:13 UTC
+> Last updated: 2026-05-06 17:30 UTC
 
 
 ## 📚 Browse by Tag
@@ -43,7 +43,10 @@
 
 Demo example from the con/duct repository showing resource usage tracking
 
-![Plot for con/duct Demo Example](images/con-duct-demo-example.svg)
+<table>
+<tr><th align="center">ps pcpu (raw)</th><th align="center">ps cpu (time-point estimate)</th></tr>
+<tr><td><img src="images/con-duct-demo-example__ps-pcpu.svg" alt="Plot for con/duct Demo Example (ps pcpu (raw))"></td><td><img src="images/con-duct-demo-example__ps-cpu-timepoint.svg" alt="Plot for con/duct Demo Example (ps cpu (time-point estimate))"></td></tr>
+</table>
 
 <details>
 <summary>📋 Metadata</summary>
@@ -62,7 +65,10 @@ Demo example from the con/duct repository showing resource usage tracking
 **Tags**: [`synthetic`](#synthetic) [`asmacdo`](#asmacdo)
 **Repository**: [github.com/asmacdo/asmacdo-duct-gallery](https://github.com/asmacdo/asmacdo-duct-gallery/)
 
-![Plot for asmacdo-gallery example-1](images/asmacdo-gallery-example-1.svg)
+<table>
+<tr><th align="center">ps pcpu (raw)</th><th align="center">ps cpu (time-point estimate)</th></tr>
+<tr><td><img src="images/asmacdo-gallery-example-1__ps-pcpu.svg" alt="Plot for asmacdo-gallery example-1 (ps pcpu (raw))"></td><td><img src="images/asmacdo-gallery-example-1__ps-cpu-timepoint.svg" alt="Plot for asmacdo-gallery example-1 (ps cpu (time-point estimate))"></td></tr>
+</table>
 
 <details>
 <summary>📋 Metadata</summary>
@@ -81,7 +87,10 @@ Demo example from the con/duct repository showing resource usage tracking
 **Tags**: [`synthetic`](#synthetic) [`asmacdo`](#asmacdo)
 **Repository**: [github.com/asmacdo/asmacdo-duct-gallery](https://github.com/asmacdo/asmacdo-duct-gallery/)
 
-![Plot for asmacdo-gallery example-2](images/asmacdo-gallery-example-2.svg)
+<table>
+<tr><th align="center">ps pcpu (raw)</th><th align="center">ps cpu (time-point estimate)</th></tr>
+<tr><td><img src="images/asmacdo-gallery-example-2__ps-pcpu.svg" alt="Plot for asmacdo-gallery example-2 (ps pcpu (raw))"></td><td><img src="images/asmacdo-gallery-example-2__ps-cpu-timepoint.svg" alt="Plot for asmacdo-gallery example-2 (ps cpu (time-point estimate))"></td></tr>
+</table>
 
 <details>
 <summary>📋 Metadata</summary>
@@ -99,7 +108,10 @@ Demo example from the con/duct repository showing resource usage tracking
 
 **Tags**: [`local`](#local) [`s5cmd`](#s5cmd)
 
-![Plot for 's5cmd sync' dry invocation on a mighty dandiarchive bucket](images/s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket.svg)
+<table>
+<tr><th align="center">ps pcpu (raw)</th><th align="center">ps cpu (time-point estimate)</th></tr>
+<tr><td><img src="images/s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket__ps-pcpu.svg" alt="Plot for 's5cmd sync' dry invocation on a mighty dandiarchive bucket (ps pcpu (raw))"></td><td><img src="images/s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket__ps-cpu-timepoint.svg" alt="Plot for 's5cmd sync' dry invocation on a mighty dandiarchive bucket (ps cpu (time-point estimate))"></td></tr>
+</table>
 
 <details>
 <summary>📋 Metadata</summary>
@@ -118,7 +130,10 @@ Demo example from the con/duct repository showing resource usage tracking
 **Tags**: [`mriqc`](#mriqc) [`juelich`](#juelich)
 **Repository**: [cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc](https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc)
 
-![Plot for mriqc processing on a single subject/session](images/mriqc-processing-on-a-single-subject-session.svg)
+<table>
+<tr><th align="center">ps pcpu (raw)</th><th align="center">ps cpu (time-point estimate)</th></tr>
+<tr><td><img src="images/mriqc-processing-on-a-single-subject-session__ps-pcpu.svg" alt="Plot for mriqc processing on a single subject/session (ps pcpu (raw))"></td><td><img src="images/mriqc-processing-on-a-single-subject-session__ps-cpu-timepoint.svg" alt="Plot for mriqc processing on a single subject/session (ps cpu (time-point estimate))"></td></tr>
+</table>
 
 <details>
 <summary>📋 Metadata</summary>
