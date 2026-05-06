@@ -70,10 +70,42 @@ class ExampleEntry(BaseModel):
         return not str(self.info_file).startswith('http')
 
 
+class PlotVariant(BaseModel):
+    """A named plot variant rendered for every example.
+
+    When the registry has 2+ variants, each example renders one SVG per
+    variant and they are laid out side-by-side in the README. The variant
+    `name` is used in the SVG filename (`<slug>__<name>.svg`); `label` is
+    the human-readable column header.
+    """
+
+    name: str
+    label: str = ""
+    plot_options: list[str] = []
+
+    @field_validator('name')
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError('Variant name cannot be empty')
+        # Filename-safe: alphanumeric + hyphens
+        if not v.replace('-', '').replace('_', '').isalnum():
+            raise ValueError(
+                f'Variant name "{v}" must be alphanumeric + hyphens/underscores only'
+            )
+        return v
+
+    @property
+    def display_label(self) -> str:
+        return self.label if self.label else self.name
+
+
 class ExampleRegistry(BaseModel):
     """Collection of all examples, loaded from YAML configuration."""
 
     examples: list[ExampleEntry]
+    variants: list[PlotVariant] = []
 
     @field_validator('examples')
     @classmethod

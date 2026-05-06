@@ -1,3 +1,11 @@
+variants:
+  - name: ps-pcpu
+    label: "ps pcpu (raw)"
+    plot_options: ["--cpu", "ps-pcpu"]
+  - name: ps-cpu-timepoint
+    label: "ps cpu (time-point estimate)"
+    plot_options: ["--cpu", "ps-cpu-timepoint"]
+
 examples:
   - title: "con/duct Demo Example"
     source_repo: "https://github.com/con/duct/"
