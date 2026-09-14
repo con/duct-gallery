@@ -42,6 +42,10 @@ examples:
     tags:
       - local
       - s5cmd
+    description: >-
+      A single process running steadily for seven hours. The raw view is the honest one here:
+      the time-point estimate widens into a band as the process ages (see "Reading the plots"),
+      so the sawtooth is measurement noise, not the workload.
   - title: "mriqc processing on a single subject/session"
     source_repo: "https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc"
     info_file: "https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc/media/branch/base/logs/duct/sub-0001_2025.09.17T23.06.15-3344424_info.json"
