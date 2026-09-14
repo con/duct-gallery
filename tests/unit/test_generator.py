@@ -132,3 +132,77 @@ def test_footer_section():
     assert "🛠️" in footer or "Maintenance" in footer
     assert "con-duct-gallery.yaml" in footer or "examples" in footer.lower()
     assert "GitHub Actions" in footer or "automatically" in footer.lower()
+
+
+def _variant_fixture():
+    from pathlib import Path
+    from con_duct_gallery.models import ExampleEntry, PlotVariant
+
+    example = ExampleEntry(
+        title="Test Example",
+        source_repo="https://github.com/test/repo",
+        info_file="https://example.com/info.json",
+    )
+    variants = [
+        PlotVariant(name="ps-pcpu", label="ps pcpu (raw)", plot_options=["--cpu", "ps-pcpu"]),
+        PlotVariant(name="ps-cpu-timepoint", plot_options=["--cpu", "ps-cpu-timepoint"]),
+    ]
+    log_paths = {
+        'info': Path('logs/test-example/example_output_info.json'),
+        'usage': Path('logs/test-example/example_output_usage.json'),
+        'stdout': Path('logs/test-example/example_output_stdout'),
+        'stderr': Path('logs/test-example/example_output_stderr')
+    }
+    return example, variants, log_paths
+
+
+def test_example_section_with_variants():
+    """Two or more variants render one <img> per variant in a table."""
+    from con_duct_gallery.generator import generate_example_section
+
+    example, variants, log_paths = _variant_fixture()
+
+    markdown = generate_example_section(
+        example, svg_exists=False, log_paths=log_paths, image_dir="images",
+        variants=variants,
+        variant_svg_exists={"ps-pcpu": True, "ps-cpu-timepoint": True},
+    )
+
+    assert "<table>" in markdown
+    assert '<th align="center">ps pcpu (raw)</th>' in markdown
+    assert '<th align="center">ps-cpu-timepoint</th>' in markdown  # label falls back to name
+    assert 'src="images/test-example__ps-pcpu.svg"' in markdown
+    assert 'src="images/test-example__ps-cpu-timepoint.svg"' in markdown
+    assert "![Plot for" not in markdown  # no single-plot fallback
+
+
+def test_example_section_variant_missing_svg():
+    """A variant whose SVG is missing gets a warning cell, the others still render."""
+    from con_duct_gallery.generator import generate_example_section
+
+    example, variants, log_paths = _variant_fixture()
+
+    markdown = generate_example_section(
+        example, svg_exists=False, log_paths=log_paths, image_dir="images",
+        variants=variants,
+        variant_svg_exists={"ps-pcpu": True},
+    )
+
+    assert 'src="images/test-example__ps-pcpu.svg"' in markdown
+    assert "test-example__ps-cpu-timepoint.svg" not in markdown
+    assert "Plot not available" in markdown
+
+
+def test_example_section_single_variant_uses_plain_plot():
+    """Fewer than two variants falls back to the single-plot rendering."""
+    from con_duct_gallery.generator import generate_example_section
+
+    example, variants, log_paths = _variant_fixture()
+
+    markdown = generate_example_section(
+        example, svg_exists=True, log_paths=log_paths, image_dir="images",
+        variants=variants[:1],
+    )
+
+    assert "<table>" not in markdown
+    assert "![Plot for Test Example](images/test-example.svg)" in markdown

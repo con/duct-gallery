@@ -126,3 +126,32 @@ def test_at_least_one_example_required():
     with pytest.raises(ValidationError) as exc:
         ExampleRegistry(examples=[])
     assert "At least one example" in str(exc.value)
+
+
+def test_variants_default_empty():
+    """A registry without a variants block has none."""
+    from con_duct_gallery.models import ExampleEntry, ExampleRegistry
+
+    entry = ExampleEntry(
+        title="Test",
+        source_repo="https://github.com/test/repo",
+        info_file="https://example.com/info.json",
+    )
+    assert ExampleRegistry(examples=[entry]).variants == []
+
+
+def test_variant_label_falls_back_to_name():
+    """display_label is the label when given, else the name."""
+    from con_duct_gallery.models import PlotVariant
+
+    assert PlotVariant(name="ps-pcpu").display_label == "ps-pcpu"
+    assert PlotVariant(name="ps-pcpu", label="ps pcpu (raw)").display_label == "ps pcpu (raw)"
+
+
+@pytest.mark.parametrize("name", ["", "   ", "has space", "slash/y", "dot.svg"])
+def test_variant_name_must_be_filename_safe(name):
+    """Variant names go into SVG filenames, so only [A-Za-z0-9_-] is allowed."""
+    from con_duct_gallery.models import PlotVariant
+
+    with pytest.raises(ValidationError):
+        PlotVariant(name=name)
