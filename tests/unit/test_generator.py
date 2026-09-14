@@ -206,3 +206,29 @@ def test_example_section_single_variant_uses_plain_plot():
 
     assert "<table>" not in markdown
     assert "![Plot for Test Example](images/test-example.svg)" in markdown
+
+
+def test_reading_guide_lists_variant_descriptions():
+    """The guide has one bullet per variant, description included when given."""
+    from con_duct_gallery.generator import generate_reading_guide
+    from con_duct_gallery.models import PlotVariant
+
+    variants = [
+        PlotVariant(name="raw", label="Raw", description="As sampled."),
+        PlotVariant(name="est"),
+    ]
+
+    guide = generate_reading_guide(variants)
+
+    assert guide.startswith("## 📖 Reading the plots")
+    assert "- **Raw**: As sampled." in guide
+    assert "- **est**\n" in guide
+
+
+def test_reading_guide_empty_without_variants():
+    """Fewer than two variants means the single-plot layout, so no guide."""
+    from con_duct_gallery.generator import generate_reading_guide
+    from con_duct_gallery.models import PlotVariant
+
+    assert generate_reading_guide([]) == ""
+    assert generate_reading_guide([PlotVariant(name="only")]) == ""

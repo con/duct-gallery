@@ -48,6 +48,35 @@ def generate_header(timestamp: str) -> str:
 """
 
 
+def generate_reading_guide(variants: list[PlotVariant]) -> str:
+    """Generate the "Reading the plots" section explaining each plot variant.
+
+    Args:
+        variants: Plot variants rendered side-by-side; one bullet per variant
+            that has a description
+
+    Returns:
+        Markdown section, or an empty string when fewer than two variants
+        are configured (the single-plot layout needs no explanation)
+    """
+    if len(variants) < 2:
+        return ""
+
+    lines = ["## 📖 Reading the plots", ""]
+    lines.append(
+        "Every example is plotted once per CPU mode, side by side. "
+        "The columns are:"
+    )
+    lines.append("")
+    for v in variants:
+        if v.description:
+            lines.append(f"- **{v.display_label}**: {v.description}")
+        else:
+            lines.append(f"- **{v.display_label}**")
+    lines.append("")
+    return "\n".join(lines) + "\n"
+
+
 def generate_tag_index(registry: ExampleRegistry) -> str:
     """Generate tag index section with subsections for each tag.
 
@@ -209,6 +238,7 @@ def generate_gallery(
     # Build sections
     sections = []
     sections.append(generate_header(timestamp))
+    sections.append(generate_reading_guide(registry.variants))
     sections.append(generate_tag_index(registry))
     sections.append("## 📊 Examples\n")
 

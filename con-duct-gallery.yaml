@@ -1,9 +1,19 @@
 variants:
   - name: ps-pcpu
     label: "ps pcpu (raw)"
+    description: >-
+      The `%CPU` column of `ps`, as sampled. It is the process's CPU time divided by its
+      lifetime so far, so it smooths over bursts and lags behind changes. Expect a spike at
+      the very start, when the lifetime is near zero.
     plot_options: ["--cpu", "ps-pcpu"]
   - name: ps-cpu-timepoint
     label: "ps cpu (time-point estimate)"
+    description: >-
+      CPU use over the last report interval, recovered from consecutive `ps` samples
+      (the change in `%CPU` × elapsed time, divided by the interval). It shows bursts the raw
+      view hides and has no startup spike. Because `ps` reports `%CPU` to 0.1%, the recovered
+      value carries an error that grows with the process's age; on runs of many hours the
+      line widens into a noisy band, and the raw view is the better read.
     plot_options: ["--cpu", "ps-cpu-timepoint"]
 
 examples:

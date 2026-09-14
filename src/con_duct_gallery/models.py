@@ -76,11 +76,13 @@ class PlotVariant(BaseModel):
     When the registry has 2+ variants, each example renders one SVG per
     variant and they are laid out side-by-side in the README. The variant
     `name` is used in the SVG filename (`<slug>__<name>.svg`); `label` is
-    the human-readable column header.
+    the human-readable column header; `description` explains how to read
+    the variant and feeds the README's "Reading the plots" section.
     """
 
     name: str
     label: str = ""
+    description: str = ""
     plot_options: list[str] = []
 
     @field_validator('name')
