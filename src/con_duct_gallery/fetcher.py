@@ -71,16 +71,16 @@ def fetch_info_json(url_or_path: str, dest: Path, repo_root: Path = None) -> dic
         return json.loads(content)
 
 
-def parse_output_paths(info_json: dict, base_url_or_path: str, repo_root: Path = None) -> dict[str, str]:
+def parse_output_paths(info_json: dict, base_url_or_path: str) -> dict[str, str]:
     """Extract file URLs/paths from output_paths field in info JSON.
 
     Args:
         info_json: Parsed info JSON dictionary
-        base_url_or_path: Base URL or local file path to resolve relative paths
-        repo_root: Repository root path for local files (defaults to cwd)
+        base_url_or_path: Base URL or repo-relative path of the info file;
+            the other files are taken to sit in the same directory
 
     Returns:
-        Dictionary mapping file types to URLs or local paths:
+        Dictionary mapping file types to URLs or repo-relative paths:
         - 'usage': URL/path to usage JSON
         - 'stdout': URL/path to stdout file
         - 'stderr': URL/path to stderr file
@@ -109,23 +109,16 @@ def parse_output_paths(info_json: dict, base_url_or_path: str, repo_root: Path =
                     full_path = f"{base_dir}/{filename}"
                     file_urls[key] = f"{base_scheme_host}{full_path}"
     else:
-        # Local path case
-        if repo_root is None:
-            repo_root = Path.cwd()
-
-        base_path = repo_root / base_url_or_path
-        base_dir = base_path.parent
+        # Local path case: keep paths relative to the repo root, as the
+        # README links them. The recorded output_paths reflect wherever duct
+        # ran (possibly absolute), but the files sit next to the info file,
+        # so only the filename is used.
+        base_dir = Path(base_url_or_path).parent
 
         file_urls = {}
         for key in ['usage', 'stdout', 'stderr', 'info']:
             if key in output_paths:
-                rel_path = output_paths[key]
-                # Resolve relative to the directory containing the info file
-                if Path(rel_path).is_absolute():
-                    file_urls[key] = rel_path
-                else:
-                    # Relative path - resolve from base directory
-                    file_urls[key] = str(base_dir / Path(rel_path).name)
+                file_urls[key] = str(base_dir / Path(output_paths[key]).name)
 
     return file_urls
 
@@ -169,20 +162,20 @@ def fetch_log_files(
         # Parse info JSON to get other file paths
         content = info_file_path.read_text()
         info_json = json.loads(content)
-        file_paths = parse_output_paths(info_json, str(example.info_file), repo_root)
+        file_paths = parse_output_paths(info_json, str(example.info_file))
 
-        # Use the original local paths directly
-        info_path = info_file_path
+        # Repo-relative paths, as they will appear in the README
+        info_path = Path(example.info_file)
         usage_path = Path(file_paths.get('usage', ''))
         stdout_path = Path(file_paths.get('stdout', ''))
         stderr_path = Path(file_paths.get('stderr', ''))
 
         # Verify all files exist
         for path, name in [(usage_path, 'usage'), (stdout_path, 'stdout'), (stderr_path, 'stderr')]:
-            if path and not path.exists():
-                raise FileNotFoundError(f"Local {name} file not found: {path}")
+            if path and not (repo_root / path).exists():
+                raise FileNotFoundError(f"Local {name} file not found: {repo_root / path}")
 
-        logger.debug(f"  └─ Using local files from {info_path.parent}")
+        logger.debug(f"  └─ Using local files from {info_file_path.parent}")
         return FetchedLog(info_path, usage_path, stdout_path, stderr_path)
     else:
         # Remote files - download to log_dir
@@ -207,7 +200,7 @@ def fetch_log_files(
         info_json = fetch_info_json(str(example.info_file), info_path, repo_root)
 
         # Parse output_paths to get other file URLs
-        file_paths = parse_output_paths(info_json, str(example.info_file), repo_root)
+        file_paths = parse_output_paths(info_json, str(example.info_file))
 
         # Fetch usage, stdout, stderr
         if 'usage' in file_paths:

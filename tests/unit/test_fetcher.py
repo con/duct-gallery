@@ -76,3 +76,41 @@ def test_fetch_with_cache(tmp_path):
         result = fetch_log_files(example, tmp_path, force=False)
         mock_fetch.assert_not_called()  # Cache used
         assert result.info_json.exists()
+
+
+def test_fetch_local_returns_repo_relative_paths(tmp_path):
+    """Local examples yield repo-relative paths, so README links work on GitHub.
+
+    The info JSON records wherever duct ran (here an absolute prefix on some
+    other machine); only the filename matters, the files sit next to it.
+    """
+    from con_duct_gallery.fetcher import fetch_log_files
+    from con_duct_gallery.models import ExampleEntry
+
+    log_dir = tmp_path / "logs" / "local-1"
+    log_dir.mkdir(parents=True)
+    prefix = "/scratch/elsewhere/run_"
+    (log_dir / "run_info.json").write_text(json.dumps({"output_paths": {
+        "usage": f"{prefix}usage.json",
+        "stdout": f"{prefix}stdout",
+        "stderr": f"{prefix}stderr",
+        "info": f"{prefix}info.json",
+    }}))
+    for name in ("run_usage.json", "run_stdout", "run_stderr"):
+        (log_dir / name).write_text("")
+
+    example = ExampleEntry(
+        title="Local Example",
+        source_repo="",
+        info_file="logs/local-1/run_info.json",
+    )
+
+    result = fetch_log_files(example, tmp_path / "unused", repo_root=tmp_path)
+
+    assert result == (
+        Path("logs/local-1/run_info.json"),
+        Path("logs/local-1/run_usage.json"),
+        Path("logs/local-1/run_stdout"),
+        Path("logs/local-1/run_stderr"),
+    )
+    assert not any(p.is_absolute() for p in result)
