@@ -68,13 +68,18 @@ examples:
       - mechababs
     description: >-
       fMRIPrep `--level minimal` on one subject of the UCLA CNP LA5c study (OpenNeuro
-      ds000030): 5.2 hours, 16.9 GB peak. The nipype log in stdout puts FreeSurfer's
-      recon-all in the first three hours, where the CPU holds near 200%; after it finishes
-      the profile gets busier and memory climbs in steps to the peak. The two views agree
-      here. SLURM's accounting reported 22.3 GB MaxRSS for the same job. On this cluster
-      that number is the job cgroup's memory counter, which includes file cache the kernel
-      would reclaim when memory runs short, while duct sums the resident set of each
-      process it sees; the two do not measure the same thing.
+      ds000030): 5.2 hours, 16.9 GB peak. A reading key first, because duct wraps a whole
+      tree of processes and each sample is a snapshot of all of them. The dotted lines are
+      single processes. The solid line is the largest single process at each sample, a lower
+      bound on what the tree needed together. The dashed line is the sum across processes,
+      an upper bound: for memory it counts pages shared between processes once per process.
+      The summary numbers in `info.json`, like the 16.9 GB peak here, are the maximum of that
+      dashed line. In this run the nipype log in stdout puts FreeSurfer's recon-all in the
+      first three hours, where the CPU holds near 200%; after it finishes the profile gets
+      busier and memory climbs in steps to the peak. The two CPU views agree here. SLURM's
+      accounting reported 22.3 GB MaxRSS for the same job. On this cluster that number is the
+      job cgroup's memory counter, which includes file cache the kernel would reclaim when
+      memory runs short, so it sits above even duct's upper bound.
   - title: "fMRIPrep on 1 subject of ds002785"
     source_repo: ""
     info_file: "logs/fmriprep-ds002785-c5/acq-2026.09.08T19.49.36+64107796_1_info.json"
@@ -86,10 +91,12 @@ examples:
     description: >-
       The same configuration on one subject of AOMIC-PIOP1 (OpenNeuro ds002785): 8.15 hours,
       25.7 GB peak (SLURM reported 34 GB; same caveat as above). recon-all again finishes
-      about three hours in, and the rest is long plateaus, including a shelf from 4.2 to
-      6.9 hours where the largest single process holds 10 GB while the sum across processes
-      sits near 20 GB. Compare the two views around 5.6 hours. The raw view reports
-      3600% CPU for one sample, which stretches the axis and flattens everything else: a
-      burst of short-lived processes, each with a near-zero lifetime, whose inflated `%CPU`
-      values are summed. The time-point estimate needs two samples of a process, so those
-      short-lived pids drop out and the 400% plateau underneath stays readable.
+      about three hours in, and the rest is long plateaus. The two memory bounds separate
+      most from 4.2 to 6.9 hours, where the largest single process holds 10 GB while the sum
+      across processes sits near 20 GB; the run's peak at 5.5 hours is one 12 GB process on
+      top of the rest. The CPU spike is the very last sample, at 8.15 hours: the raw view
+      sums 3600% across 27 processes, which stretches the axis and flattens everything else.
+      Those are short-lived processes in the run's final seconds, each with a near-zero
+      lifetime, whose inflated `%CPU` values add up (the largest single one reads 900%). The
+      time-point estimate needs two samples of a process, so those pids drop out and the
+      400% plateau underneath stays readable.
