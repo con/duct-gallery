@@ -71,9 +71,10 @@ examples:
       ds000030): 5.2 hours, 16.9 GB peak. The nipype log in stdout puts FreeSurfer's
       recon-all in the first three hours, where the CPU holds near 200%; after it finishes
       the profile gets busier and memory climbs in steps to the peak. The two views agree
-      here. SLURM's accounting reported 22.3 GB MaxRSS for the same job. Depending on how
-      the cluster gathers it, that figure can include the file cache, which the kernel
-      reclaims when memory runs short, so the two numbers do not measure the same thing.
+      here. SLURM's accounting reported 22.3 GB MaxRSS for the same job. On this cluster
+      that number is the job cgroup's memory counter, which includes file cache the kernel
+      would reclaim when memory runs short, while duct sums the resident set of each
+      process it sees; the two do not measure the same thing.
   - title: "fMRIPrep on 1 subject of ds002785"
     source_repo: ""
     info_file: "logs/fmriprep-ds002785-c5/acq-2026.09.08T19.49.36+64107796_1_info.json"
