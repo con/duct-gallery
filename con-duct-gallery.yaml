@@ -1,3 +1,21 @@
+variants:
+  - name: ps-pcpu
+    label: "ps pcpu (raw)"
+    description: >-
+      The `%CPU` column of `ps`, as sampled. It is the process's CPU time divided by its
+      lifetime so far, so it smooths over bursts and lags behind changes. Expect a spike at
+      the very start, when the lifetime is near zero.
+    plot_options: ["--cpu", "ps-pcpu"]
+  - name: ps-cpu-timepoint
+    label: "ps cpu (time-point estimate)"
+    description: >-
+      CPU use over the last report interval, recovered from consecutive `ps` samples
+      (the change in `%CPU` × elapsed time, divided by the interval). It shows bursts the raw
+      view hides and has no startup spike. Because `ps` reports `%CPU` to 0.1%, the recovered
+      value carries an error that grows with the process's age; on runs of many hours the
+      line widens into a noisy band, and the raw view is the better read.
+    plot_options: ["--cpu", "ps-cpu-timepoint"]
+
 examples:
   - title: "con/duct Demo Example"
     source_repo: "https://github.com/con/duct/"
@@ -24,9 +42,19 @@ examples:
     tags:
       - local
       - s5cmd
+    description: >-
+      A single process running steadily for seven hours. The raw view is the honest one here:
+      the time-point estimate widens into a band as the process ages (see "Reading the plots"),
+      so the sawtooth is measurement noise, not the workload.
   - title: "mriqc processing on a single subject/session"
     source_repo: "https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc"
     info_file: "https://cerebra.fz-juelich.de/f.hoffstaedter/ds005256-mriqc/media/branch/base/logs/duct/sub-0001_2025.09.17T23.06.15-3344424_info.json"
     tags:
       - mriqc
       - juelich
+    description: >-
+      A seventeen-hour run with a handful of processes. The raw view opens with a spike
+      (220% in the first minute) that drifts down over the first few hours before settling
+      near 100%: that is the lifetime average catching up with the steady state, not the
+      workload winding down (see "Reading the plots"). The time-point view has no such
+      spike; it follows the workload from the start.
