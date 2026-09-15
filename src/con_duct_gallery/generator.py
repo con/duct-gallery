@@ -52,16 +52,11 @@ def generate_reading_guide(variants: list[PlotVariant]) -> str:
     """Generate the "Reading the plots" section explaining each plot variant.
 
     Args:
-        variants: Plot variants rendered side-by-side; one bullet per variant
-            that has a description
+        variants: Plot variants rendered side-by-side, one bullet each
 
     Returns:
-        Markdown section, or an empty string when fewer than two variants
-        are configured (the single-plot layout needs no explanation)
+        Markdown section
     """
-    if len(variants) < 2:
-        return ""
-
     lines = ["## 📖 Reading the plots", ""]
     lines.append(
         "Every example is plotted once per CPU mode, side by side. "
@@ -109,20 +104,18 @@ def generate_tag_index(registry: ExampleRegistry) -> str:
 
 def generate_example_section(
     example: ExampleEntry,
-    svg_exists: bool,
     log_paths: dict[str, Path],
     image_dir: str,
-    variants: list[PlotVariant] = None,
-    variant_svg_exists: dict[str, bool] = None,
+    variants: list[PlotVariant],
+    variant_svg_exists: dict[str, bool],
 ) -> str:
     """Generate markdown section for a single example.
 
     Args:
         example: Example entry
-        svg_exists: Whether the single-plot SVG file exists (when variants is None/empty)
         log_paths: Dictionary with 'info', 'usage', 'stdout', 'stderr' paths
         image_dir: Directory containing image files
-        variants: Plot variants to render side-by-side (if 2+ provided)
+        variants: Plot variants to render side-by-side, one column each
         variant_svg_exists: Map from variant name to whether its SVG exists
 
     Returns:
@@ -151,33 +144,25 @@ def generate_example_section(
 
     slug = slugify(example.title)
 
-    if variants and len(variants) >= 2:
-        # Side-by-side variants. GitHub renders inline HTML tables in markdown.
-        variant_svg_exists = variant_svg_exists or {}
-        lines.append("<table>")
-        header_cells = "".join(
-            f"<th align=\"center\">{v.display_label}</th>" for v in variants
-        )
-        lines.append(f"<tr>{header_cells}</tr>")
-        body_cells = []
-        for v in variants:
-            if variant_svg_exists.get(v.name, False):
-                body_cells.append(
-                    f"<td><img src=\"{image_dir}/{slug}__{v.name}.svg\" "
-                    f"alt=\"Plot for {example.title} ({v.display_label})\"></td>"
-                )
-            else:
-                body_cells.append(
-                    "<td>⚠️ <em>Plot not available</em></td>"
-                )
-        lines.append(f"<tr>{''.join(body_cells)}</tr>")
-        lines.append("</table>")
-    else:
-        if svg_exists:
-            lines.append(f"![Plot for {example.title}]({image_dir}/{slug}.svg)")
+    # One column per variant. GitHub renders inline HTML tables in markdown.
+    lines.append("<table>")
+    header_cells = "".join(
+        f"<th align=\"center\">{v.display_label}</th>" for v in variants
+    )
+    lines.append(f"<tr>{header_cells}</tr>")
+    body_cells = []
+    for v in variants:
+        if variant_svg_exists.get(v.name, False):
+            body_cells.append(
+                f"<td><img src=\"{image_dir}/{v.svg_name(slug)}\" "
+                f"alt=\"Plot for {example.title} ({v.display_label})\"></td>"
+            )
         else:
-            lines.append("> ⚠️ **Plot not available** - Generation failed or plot file missing")
-
+            body_cells.append(
+                "<td>⚠️ <em>Plot not available</em></td>"
+            )
+    lines.append(f"<tr>{''.join(body_cells)}</tr>")
+    lines.append("</table>")
     lines.append("")
 
     # Metadata details
@@ -243,36 +228,19 @@ def generate_gallery(
     sections.append("## 📊 Examples\n")
 
     # Generate section for each example
-    variants = registry.variants
-    use_variants = len(variants) >= 2
-
     for example in registry.examples:
         slug = slugify(example.title)
-
-        # Get log paths for this example
-        log_paths = example_log_paths.get(example.title, {})
-
-        if use_variants:
-            variant_svg_exists = {
-                v.name: (image_dir / f"{slug}__{v.name}.svg").exists()
-                for v in variants
-            }
-            section = generate_example_section(
-                example,
-                svg_exists=False,
-                log_paths=log_paths,
-                image_dir=str(image_dir),
-                variants=variants,
-                variant_svg_exists=variant_svg_exists,
-            )
-        else:
-            svg_path = image_dir / f"{slug}.svg"
-            section = generate_example_section(
-                example,
-                svg_exists=svg_path.exists(),
-                log_paths=log_paths,
-                image_dir=str(image_dir),
-            )
+        variant_svg_exists = {
+            v.name: (image_dir / v.svg_name(slug)).exists()
+            for v in registry.variants
+        }
+        section = generate_example_section(
+            example,
+            log_paths=example_log_paths.get(example.title, {}),
+            image_dir=str(image_dir),
+            variants=registry.variants,
+            variant_svg_exists=variant_svg_exists,
+        )
 
         sections.append(section)
         sections.append("---\n")  # Separator

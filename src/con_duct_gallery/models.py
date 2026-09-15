@@ -73,11 +73,11 @@ class ExampleEntry(BaseModel):
 class PlotVariant(BaseModel):
     """A named plot variant rendered for every example.
 
-    When the registry has 2+ variants, each example renders one SVG per
-    variant and they are laid out side-by-side in the README. The variant
-    `name` is used in the SVG filename (`<slug>__<name>.svg`); `label` is
-    the human-readable column header; `description` explains how to read
-    the variant and feeds the README's "Reading the plots" section.
+    Each example renders one SVG per variant and they are laid out
+    side-by-side in the README. The variant `name` is used in the SVG
+    filename (see `svg_name`); `label` is the human-readable column header;
+    `description` explains how to read the variant and feeds the README's
+    "Reading the plots" section.
     """
 
     name: str
@@ -102,12 +102,24 @@ class PlotVariant(BaseModel):
     def display_label(self) -> str:
         return self.label if self.label else self.name
 
+    def svg_name(self, slug: str) -> str:
+        """Filename of this variant's plot for the example with the given slug."""
+        return f"{slug}__{self.name}.svg"
+
 
 class ExampleRegistry(BaseModel):
     """Collection of all examples, loaded from YAML configuration."""
 
     examples: list[ExampleEntry]
-    variants: list[PlotVariant] = []
+    variants: list[PlotVariant]
+
+    @field_validator('variants')
+    @classmethod
+    def validate_variants(cls, v: list[PlotVariant]) -> list[PlotVariant]:
+        """Validate at least one variant, since every example is plotted per variant."""
+        if not v:
+            raise ValueError('At least one plot variant required')
+        return v
 
     @field_validator('examples')
     @classmethod
