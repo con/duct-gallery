@@ -52,3 +52,9 @@ examples:
     tags:
       - mriqc
       - juelich
+    description: >-
+      A seventeen-hour run with a handful of processes. The raw view opens with a spike
+      (220% in the first minute) that drifts down over the first few hours before settling
+      near 100%: that is the lifetime average catching up with the steady state, not the
+      workload winding down (see "Reading the plots"). The time-point view has no such
+      spike; it follows the workload from the start.
