@@ -1,0 +1,54 @@
+Traceback (most recent call last):
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/managers.py", line 599, in _run_server
+    server.serve_forever()
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/managers.py", line 184, in serve_forever
+    sys.exit(0)
+SystemExit: 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/util.py", line 303, in _run_finalizers
+    finalizer()
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/util.py", line 227, in __call__
+    res = self._callback(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/util.py", line 136, in _remove_temp_dir
+    rmtree(tempdir, onerror=onerror)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 759, in rmtree
+    _rmtree_safe_fd(stack, onexc)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 703, in _rmtree_safe_fd
+    onexc(func, path, err)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 750, in onexc
+    return onerror(func, path, exc_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 700, in _rmtree_safe_fd
+    onexc(os.unlink, fullname, err)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 750, in onexc
+    return onerror(func, path, exc_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 698, in _rmtree_safe_fd
+    os.unlink(entry.name, dir_fd=topfd)
+OSError: [Errno 16] Device or resource busy: '/tmp/pymp-tl3__pbt'
+Traceback (most recent call last):
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/util.py", line 303, in _run_finalizers
+    finalizer()
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/util.py", line 227, in __call__
+    res = self._callback(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/multiprocessing/util.py", line 136, in _remove_temp_dir
+    rmtree(tempdir, onerror=onerror)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 759, in rmtree
+    _rmtree_safe_fd(stack, onexc)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 703, in _rmtree_safe_fd
+    onexc(func, path, err)
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 750, in onexc
+    return onerror(func, path, exc_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.pixi/envs/fmriprep/lib/python3.12/shutil.py", line 662, in _rmtree_safe_fd
+    os.rmdir(name, dir_fd=dirfd)
+OSError: [Errno 39] Directory not empty: '/tmp/pymp-ap0zxwhe'

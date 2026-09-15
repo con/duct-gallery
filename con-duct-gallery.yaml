@@ -58,3 +58,41 @@ examples:
       near 100%: that is the lifetime average catching up with the steady state, not the
       workload winding down (see "Reading the plots"). The time-point view has no such
       spike; it follows the workload from the start.
+  - title: "fMRIPrep on 1 subject of ds000030"
+    source_repo: ""
+    info_file: "logs/fmriprep-ds000030-c5/acq-2026.09.09T00.59.50+64123263_1_info.json"
+    tags:
+      - local
+      - fmriprep
+      - openneuro
+      - unity
+      - mechababs
+    description: >-
+      fMRIPrep 25.2.5 with `--level minimal` on a single subject (sub-10159, five task and
+      rest runs, no sessions) of the UCLA CNP LA5c study, OpenNeuro ds000030, run under SLURM
+      on 8 cores with `--nprocs 4 --omp-nthreads 2`: 5.2 hours. Read it as two acts. For the
+      first three hours FreeSurfer's recon-all holds the CPU near 200% while the BOLD
+      workflows start alongside it; once recon-all finishes the run gets busy, the CPU band
+      swings between one and four cores, and memory climbs in tiers to a 16.9 GB peak. The
+      two views agree here. SLURM's own accounting reported 22.3 GB MaxRSS for the same job,
+      5 GB above the sum of per-process RSS that duct samples. stderr ends with two tracebacks
+      from a multiprocessing temp-dir cleanup on NFS; fMRIPrep still exited 0.
+  - title: "fMRIPrep on 1 subject of ds002785"
+    source_repo: ""
+    info_file: "logs/fmriprep-ds002785-c5/acq-2026.09.08T19.49.36+64107796_1_info.json"
+    tags:
+      - local
+      - fmriprep
+      - openneuro
+      - unity
+      - mechababs
+    description: >-
+      The same fMRIPrep configuration on a single subject (sub-0001, six runs, no sessions)
+      of AOMIC-PIOP1, OpenNeuro ds002785: 8.15 hours. Again recon-all for the first three
+      hours, then long plateaus: a 10 GB memory shelf from 4.2 to 6.9 hours and a 25.7 GB
+      peak (SLURM reported 34 GB). Compare the two views around 5.6 hours. The raw view
+      reports 3600% CPU for one sample, which stretches the axis and flattens everything
+      else: a burst of short-lived processes, each with a near-zero lifetime, whose inflated
+      `%CPU` values are summed. The time-point estimate needs two samples of a process, so
+      those short-lived pids drop out and the 400% plateau underneath stays readable. Same
+      NFS cleanup tracebacks in stderr, exit 0.
