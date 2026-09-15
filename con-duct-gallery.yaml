@@ -86,8 +86,9 @@ examples:
     description: >-
       The same configuration on one subject of AOMIC-PIOP1 (OpenNeuro ds002785): 8.15 hours,
       25.7 GB peak (SLURM reported 34 GB; same caveat as above). recon-all again finishes
-      about three hours in, and the rest is long plateaus, including a 10 GB memory shelf
-      from 4.2 to 6.9 hours. Compare the two views around 5.6 hours. The raw view reports
+      about three hours in, and the rest is long plateaus, including a shelf from 4.2 to
+      6.9 hours where the largest single process holds 10 GB while the sum across processes
+      sits near 20 GB. Compare the two views around 5.6 hours. The raw view reports
       3600% CPU for one sample, which stretches the axis and flattens everything else: a
       burst of short-lived processes, each with a near-zero lifetime, whose inflated `%CPU`
       values are summed. The time-point estimate needs two samples of a process, so those
