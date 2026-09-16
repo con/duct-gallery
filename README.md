@@ -1,7 +1,7 @@
 # con/duct Examples Gallery
 
 > 🤖 Automatically generated gallery of con/duct usage examples
-> Last updated: 2026-09-15 14:53 UTC
+> Last updated: 2026-09-15 15:58 UTC
 
 
 ## 📖 Reading the plots
@@ -18,13 +18,21 @@ Every example is plotted once per CPU mode, side by side. The columns are:
 
 [asmacdo-gallery example-1](#asmacdo-gallery-example-1), [asmacdo-gallery example-2](#asmacdo-gallery-example-2)
 
+#### fmriprep
+
+[fMRIPrep on 1 subject of ds000030](#fmriprep-on-1-subject-of-ds000030), [fMRIPrep on 1 subject of ds002785](#fmriprep-on-1-subject-of-ds002785)
+
 #### juelich
 
 [mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
 
 #### local
 
-['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket)
+['s5cmd sync' dry invocation on a mighty dandiarchive bucket](#s5cmd-sync-dry-invocation-on-a-mighty-dandiarchive-bucket), [fMRIPrep on 1 subject of ds000030](#fmriprep-on-1-subject-of-ds000030), [fMRIPrep on 1 subject of ds002785](#fmriprep-on-1-subject-of-ds002785)
+
+#### mechababs
+
+[fMRIPrep on 1 subject of ds000030](#fmriprep-on-1-subject-of-ds000030), [fMRIPrep on 1 subject of ds002785](#fmriprep-on-1-subject-of-ds002785)
 
 #### medium-length
 
@@ -33,6 +41,10 @@ Every example is plotted once per CPU mode, side by side. The columns are:
 #### mriqc
 
 [mriqc processing on a single subject/session](#mriqc-processing-on-a-single-subject-session)
+
+#### openneuro
+
+[fMRIPrep on 1 subject of ds000030](#fmriprep-on-1-subject-of-ds000030), [fMRIPrep on 1 subject of ds002785](#fmriprep-on-1-subject-of-ds002785)
 
 #### s5cmd
 
@@ -154,6 +166,52 @@ A seventeen-hour run with a handful of processes. The raw view opens with a spik
 - **Usage data**: [example_output_usage.json](logs/mriqc-processing-on-a-single-subjectsession/example_output_usage.json)
 - **Standard output**: [stdout](logs/mriqc-processing-on-a-single-subjectsession/example_output_stdout)
 - **Standard error**: [stderr](logs/mriqc-processing-on-a-single-subjectsession/example_output_stderr)
+
+</details>
+
+---
+
+### fMRIPrep on 1 subject of ds000030
+
+**Tags**: [`local`](#local) [`fmriprep`](#fmriprep) [`openneuro`](#openneuro) [`mechababs`](#mechababs)
+
+fMRIPrep `--level minimal` on one subject of the UCLA CNP LA5c study (OpenNeuro ds000030): 5.2 hours, 16.9 GB peak. A reading key first, because duct wraps a whole tree of processes and each sample is a snapshot of all of them. The dotted lines are single processes. The solid line is the largest single process at each sample, a lower bound on what the tree needed together. The dashed line is the sum across processes, an upper bound: for memory it counts pages shared between processes once per process. The summary numbers in `info.json`, like the 16.9 GB peak here, are the maximum of that dashed line. In this run the nipype log in stdout puts FreeSurfer's recon-all in the first three hours, where the CPU holds near 200%; after it finishes the profile gets busier and memory climbs in steps to the peak. The two CPU views agree here. SLURM's accounting reported 22.3 GB MaxRSS for the same job. On this cluster that number is the job cgroup's memory counter, which includes file cache the kernel would reclaim when memory runs short, so it sits above even duct's upper bound.
+
+<table>
+<tr><th align="center">ps pcpu (raw)</th><th align="center">ps cpu (time-point estimate)</th></tr>
+<tr><td><img src="images/fmriprep-on-1-subject-of-ds000030__ps-pcpu.svg" alt="Plot for fMRIPrep on 1 subject of ds000030 (ps pcpu (raw))"></td><td><img src="images/fmriprep-on-1-subject-of-ds000030__ps-cpu-timepoint.svg" alt="Plot for fMRIPrep on 1 subject of ds000030 (ps cpu (time-point estimate))"></td></tr>
+</table>
+
+<details>
+<summary>📋 Metadata</summary>
+
+- **Info file**: [example_output_info.json](logs/fmriprep-ds000030-c5/acq-2026.09.09T00.59.50+64123263_1_info.json)
+- **Usage data**: [example_output_usage.json](logs/fmriprep-ds000030-c5/acq-2026.09.09T00.59.50+64123263_1_usage.jsonl)
+- **Standard output**: [stdout](logs/fmriprep-ds000030-c5/acq-2026.09.09T00.59.50+64123263_1_stdout)
+- **Standard error**: [stderr](logs/fmriprep-ds000030-c5/acq-2026.09.09T00.59.50+64123263_1_stderr)
+
+</details>
+
+---
+
+### fMRIPrep on 1 subject of ds002785
+
+**Tags**: [`local`](#local) [`fmriprep`](#fmriprep) [`openneuro`](#openneuro) [`mechababs`](#mechababs)
+
+The same configuration on one subject of AOMIC-PIOP1 (OpenNeuro ds002785): 8.15 hours, 25.7 GB peak (SLURM reported 34 GB; same caveat as above). recon-all again finishes about three hours in, and the rest is long plateaus. The two memory bounds separate most from 4.2 to 6.9 hours, where the largest single process holds 10 GB while the sum across processes sits near 20 GB; the run's peak at 5.5 hours is one 12 GB process on top of the rest. The CPU spike is the very last sample, at 8.15 hours: the raw view sums 3600% across 27 processes, which stretches the axis and flattens everything else. Those are short-lived processes in the run's final seconds, each with a near-zero lifetime, whose inflated `%CPU` values add up (the largest single one reads 900%). The time-point estimate needs two samples of a process, so those pids drop out and the 400% plateau underneath stays readable.
+
+<table>
+<tr><th align="center">ps pcpu (raw)</th><th align="center">ps cpu (time-point estimate)</th></tr>
+<tr><td><img src="images/fmriprep-on-1-subject-of-ds002785__ps-pcpu.svg" alt="Plot for fMRIPrep on 1 subject of ds002785 (ps pcpu (raw))"></td><td><img src="images/fmriprep-on-1-subject-of-ds002785__ps-cpu-timepoint.svg" alt="Plot for fMRIPrep on 1 subject of ds002785 (ps cpu (time-point estimate))"></td></tr>
+</table>
+
+<details>
+<summary>📋 Metadata</summary>
+
+- **Info file**: [example_output_info.json](logs/fmriprep-ds002785-c5/acq-2026.09.08T19.49.36+64107796_1_info.json)
+- **Usage data**: [example_output_usage.json](logs/fmriprep-ds002785-c5/acq-2026.09.08T19.49.36+64107796_1_usage.jsonl)
+- **Standard output**: [stdout](logs/fmriprep-ds002785-c5/acq-2026.09.08T19.49.36+64107796_1_stdout)
+- **Standard error**: [stderr](logs/fmriprep-ds002785-c5/acq-2026.09.08T19.49.36+64107796_1_stderr)
 
 </details>
 
